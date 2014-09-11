@@ -28,7 +28,7 @@
     });
 
     var Sightings = Backbone.Collection.extend({
-        model: Bird,
+        model: Sighting,
         url: "https://spreadsheets.google.com/feeds/list/17fGFqzDS8uOQKmAXRjCscY_f4l85XjEtTsvlawUYwN0/o39yaik/public/values?alt=json",
         parse: function(response) {
             return response.feed.entry
