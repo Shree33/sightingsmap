@@ -15,7 +15,33 @@ define(["messenger"], function(messenger){
         "JCNWR": "James Campebell National Wildlife Refuge"
     }
 
+    // Bird has many sightings
+    var Bird = Backbone.Model.extend({
+        defaults: function() {
+            return {
+                sightings: new Sightings
+            }
+        },
+        addSighting: function(sighting) {
+            this.get("sightings").add(sighting);
+            return this;
+        }
+    })
+    var Birds = Backbone.Collection.extend({
+        model: Bird
+    })
+
     var Sighting = Backbone.Model.extend({
+        idAttribute: 'bandnumber',
+        initialize: function(){
+            var bird = birds._byId[this.get("bird_id")]
+            if (_.isUndefined(bird)) {
+                bird = new Bird()
+                bird.id = this.get("bird_id");
+                birds.add(bird)
+            }
+            bird.addSighting(this);
+        },
         parse: function(r) {
             var p = "gsx$";
             // Get only relevant properties
@@ -27,13 +53,14 @@ define(["messenger"], function(messenger){
                     sanitized[key] = location_shortcuts[sanitized[key]]
                 }
             })
+            var bandnum = sanitized["gsx$bandnumber"]
             var date = moment(sanitized["gsx$sightingdate"])
             sanitized = _.invert(sanitized)
             // Strip gsx prefixes
             _.each(sanitized, function(val, key) {
                 sanitized[key] = val.replace(p, "");
             })
-            return _.extend(parseNums(_.invert(sanitized)), {sightingdate: date})
+            return _.extend(parseNums(_.invert(sanitized)), {sightingdate: date, bird_id: bandnum})
         },
         getBandString: function() {
             var ul = this.get("ul") || "_";
@@ -52,18 +79,28 @@ define(["messenger"], function(messenger){
         }
     });
 
-
+    var birds = new Birds()
     var sightings = new Sightings()
     sightings.fetch({
-        parse: true,
-        success: function(coll) {
-            messenger.dispatch("loaded:sightings", coll.models)
-            console.log(coll);
-        }
-    });
+        parse: true
+    }).success(function() {
+        messenger.dispatch("loaded:sightings", sightings.models)
+        console.log(sightings.at(0));
+    }).fail(function() {
+        console.log(arguments)
+    })
 
     new google.maps.Map(document.getElementById("map-canvas"), {
         center: { lat: 20.7, lng: -156.9601584},
         zoom: 8
     })
+
+    return {
+        getBirds: function() {
+            return birds;
+        },
+        getSightings: function() {
+            return sightings;
+        }
+    }
 })

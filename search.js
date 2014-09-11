@@ -1,4 +1,7 @@
-define(["messenger"], function(messenger, sightings) {
+define(["messenger", "sightings"], function(messenger, bird_data) {
+
+    $searchbar = $("#searchbar");
+
     (function (_) {
         'use strict';
 
@@ -10,8 +13,6 @@ define(["messenger"], function(messenger, sightings) {
             return compiled;
         }
     })(window._);
-
-    $searchbar = $("#searchbar");
 
     function parse(sightings) {
         var tokenized = []
@@ -32,6 +33,7 @@ define(["messenger"], function(messenger, sightings) {
         return tokenized;
     }
     messenger.when("loaded:sightings", function(sightings) {
+        console.log("loaded")
         var engine = new Bloodhound({
             local: parse(sightings),
             datumTokenizer: function(d) {
@@ -63,14 +65,14 @@ define(["messenger"], function(messenger, sightings) {
                     // header: "header"
             }
         }).on("typeahead:selected", function(e, suggestion) {
+            console.log(suggestion)
             switch(suggestion.type) {
                 case "bandnumber": 
-                    console.log("num")
+                    console.log(bird_data.getBirds()._byId[suggestion.val])
                 break;
                 case "bandstring":
                     console.log("str")
                 break;
-
             }
         })
     })
