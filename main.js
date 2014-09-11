@@ -9,7 +9,7 @@
         return obj;
     }
 
-    var Bird = Backbone.Model.extend({
+    var Sighting = Backbone.Model.extend({
         parse: function(r) {
             var p = "gsx$";
             // Get only relevant properties
@@ -27,7 +27,7 @@
         }
     });
 
-    var Birds = Backbone.Collection.extend({
+    var Sightings = Backbone.Collection.extend({
         model: Bird,
         url: "https://spreadsheets.google.com/feeds/list/17fGFqzDS8uOQKmAXRjCscY_f4l85XjEtTsvlawUYwN0/o39yaik/public/values?alt=json",
         parse: function(response) {
@@ -36,7 +36,7 @@
     });
 
 
-    var sightings = new Birds()
+    var sightings = new Sightings()
     sightings.fetch({
         parse: true,
         success: function(coll) {

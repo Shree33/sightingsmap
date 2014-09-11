@@ -68,7 +68,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 }
 
 /* line 9, ../sass/screen.scss */
-html, body, #map-canvas {
+html, body, #map-canvas, #map-canvas-wrapper {
   width: 100%;
   height: 100%;
 }
