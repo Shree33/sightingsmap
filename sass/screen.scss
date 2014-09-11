@@ -77,3 +77,23 @@ input {
     text-indent: 0;
     text-align: center;
 }
+
+ul#active-bird-list {
+    position: absolute;
+    top: 25px;
+    left: 510px;
+
+    li {
+        @include border-radius(3px);
+        border: 1px solid #fff;
+        display: inline-block;
+        text-align: center;
+        min-width: 100px;
+        line-height: 1.5em;
+        background: #f9f9f9;
+        margin: 3px 3px;
+        padding: 0 6px;
+        background: rgba(255,255,255,.7);
+    }
+
+}

@@ -19,15 +19,18 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
         _.each(sightings, function(sighting) {
             var tokens = [sighting.get("ul"), sighting.get("ur"), sighting.get("lr"), sighting.get("ll")];
             var bandstring = sighting.getBandString();
+            var bandnumber = sighting.get("bandnumber")
             tokenized.push({
                 tokens: tokens,
                 val: bandstring,
-                type: "bandstring"
+                type: "bandstring",
+                bandnumber: bandnumber
             });
             tokenized.push({
                 tokens: tokens,
-                val: sighting.get("bandnumber"),
-                type: 'bandnumber'
+                val: new String(bandnumber),
+                type: 'bandnumber',
+                bandnumber: bandnumber
             })
         })
         return tokenized;
@@ -65,13 +68,13 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
                     // header: "header"
             }
         }).on("typeahead:selected", function(e, suggestion) {
-            console.log(suggestion)
+            var bird = bird_data.getBirds()._byId[suggestion.bandnumber]
             switch(suggestion.type) {
                 case "bandnumber": 
-                    console.log(bird_data.getBirds()._byId[suggestion.val])
-                break;
                 case "bandstring":
-                    console.log("str")
+                    if (bird) {
+                        messenger.dispatch("show:sightings", bird.get("sightings"));
+                    }
                 break;
             }
         })

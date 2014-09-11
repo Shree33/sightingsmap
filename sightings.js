@@ -36,9 +36,13 @@ define(["messenger"], function(messenger){
         initialize: function(){
             var bird = birds._byId[this.get("bird_id")]
             if (_.isUndefined(bird)) {
-                bird = new Bird()
+                bird = new Bird({
+                    bandnumber: this.get("bandnumber"),
+                    bandstring: this.getBandString()
+                })
                 bird.id = this.get("bird_id");
                 birds.add(bird)
+                this.bird = bird;
             }
             bird.addSighting(this);
         },
@@ -79,8 +83,45 @@ define(["messenger"], function(messenger){
         }
     });
 
+    var SingleBird = Backbone.View.extend({
+        tagName: "li",
+        template: "<%= bandnumber %> (<%= bandstring %>)",
+        render: function() {
+            this.$el.html(_.template(this.template, this.model.toJSON()))
+            return this;
+        }
+    })
+
+    var BirdList = Backbone.View.extend({
+        el: "#active-bird-list",
+        initialize: function() {
+            var that = this;
+            this.listenTo(messenger, "show:sightings", function(sightings) {
+                sightings.each(function(sighting) {
+                    var bird = sighting.bird;
+                    that.collection.add(bird);
+
+                })
+            })
+            this.listenTo(this.collection, {
+                "add": this.addBird
+            })
+        },
+        addBird: function(bird) {
+            this.$el.append(new SingleBird({model: bird}).render().el)
+            return this;
+        },
+        render: function() {
+            var that = this;
+            this.collection.each(function(bird){ 
+                that.addBird(bird)
+            })
+        }
+    })
+
     var birds = new Birds()
     var sightings = new Sightings()
+    new BirdList({collection: new Birds()});
     sightings.fetch({
         parse: true
     }).success(function() {
@@ -88,11 +129,6 @@ define(["messenger"], function(messenger){
         console.log(sightings.at(0));
     }).fail(function() {
         console.log(arguments)
-    })
-
-    new google.maps.Map(document.getElementById("map-canvas"), {
-        center: { lat: 20.7, lng: -156.9601584},
-        zoom: 8
     })
 
     return {

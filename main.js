@@ -3,10 +3,12 @@ require.config({
     paths: {
         "sightings": "sightings",
         "search": "search",
+        "map": "map",
         "messenger": "messenger",
         "moment": "lib/moment.min",
     }
 })
 
-define(["moment", "sightings", "search"], function(){
+define(["moment", "map", "sightings", "search"], function(mom, Map){
+    new Map(document.getElementById("map-canvas"));
 })
