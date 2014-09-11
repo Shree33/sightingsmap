@@ -1,5 +1,5 @@
 define(["messenger"], function(messenger){
-  function parseNums(obj) {
+    function parseNums(obj) {
         _.each(obj, function(val, key) {
             if (!_.isNaN(parseFloat(val))) {
                 obj[key] = parseFloat(val)
@@ -11,6 +11,10 @@ define(["messenger"], function(messenger){
         return obj;
     }
 
+    var location_shortcuts = {
+        "JCNWR": "James Campebell National Wildlife Refuge"
+    }
+
     var Sighting = Backbone.Model.extend({
         parse: function(r) {
             var p = "gsx$";
@@ -19,13 +23,17 @@ define(["messenger"], function(messenger){
             // Get values from sub-objects
             _.each(sanitized, function(val, key) {
                 sanitized[key] = val.$t;
+                if (location_shortcuts[sanitized[key]]) {
+                    sanitized[key] = location_shortcuts[sanitized[key]]
+                }
             })
+            var date = moment(sanitized["gsx$sightingdate"])
             sanitized = _.invert(sanitized)
             // Strip gsx prefixes
             _.each(sanitized, function(val, key) {
                 sanitized[key] = val.replace(p, "");
             })
-            return parseNums(_.invert(sanitized))
+            return _.extend(parseNums(_.invert(sanitized)), {sightingdate: date})
         },
         getBandString: function() {
             var ul = this.get("ul") || "_";

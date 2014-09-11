@@ -6,11 +6,15 @@
 @import "compass/reset";
 @import "compass/css3";
 
+* {
+    @include box-sizing(border-box);
+}
 
 html, body, #map-canvas, #map-canvas-wrapper {
     position: relative;
     width: 100%;
     height: 100%;
+    font-family: sans-serif;
 }
 
 .twitter-typeahead {
@@ -29,4 +33,47 @@ input {
     outline: none;
     padding: 6px 5px;
     font-size: 1.4em;
+    text-indent: .7em;
+}
+
+
+.tt-dropdown-menu {
+    border: 1px solid #e3e3e3;
+    padding: 0;
+    width: 100%;
+    background: #fff;
+}
+
+[class*=tt-dataset] {
+    background: #fff;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: 1.2rem;
+
+    .tt-suggestion {
+        line-height: 2em;
+        text-indent: 1em;
+        border-top: 1px solid #fff;
+        border-bottom: 1px solid #e3e3e3;
+        cursor: pointer;
+        text-align: left;
+
+        &:last-of-type { border-bottom: none; }
+        &:first-of-type { border-top: none; }
+
+        &:hover, &.tt-cursor {
+            background: #e3e3e3;
+        }
+    }
+
+    .tt-highlight {
+        background: #f2f2f0;
+    }
+}
+
+.tt-empty-results {
+    line-height: 3;
+    text-indent: 0;
+    text-align: center;
 }

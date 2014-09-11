@@ -16,12 +16,18 @@ define(["messenger"], function(messenger, sightings) {
     function parse(sightings) {
         var tokenized = []
         _.each(sightings, function(sighting) {
+            var tokens = [sighting.get("ul"), sighting.get("ur"), sighting.get("lr"), sighting.get("ll")];
+            var bandstring = sighting.getBandString();
             tokenized.push({
-                tokens: [sighting.get("ul"), sighting.get("ur"), sighting.get("lr"), sighting.get("ll")],
-                val: sighting.getBandString(),
-                type: "sighting"
+                tokens: tokens,
+                val: bandstring,
+                type: "bandstring"
+            });
+            tokenized.push({
+                tokens: tokens,
+                val: sighting.get("bandnumber"),
+                type: 'bandnumber'
             })
-            console.log(tokenized[tokenized.length-1])
         })
         return tokenized;
     }
@@ -33,7 +39,8 @@ define(["messenger"], function(messenger, sightings) {
             },
             queryTokenizer: function(str) {
                 return Bloodhound.tokenizers.whitespace(str)
-            }
+            },
+            limit: 10
         });
 
         engine.initialize()
@@ -51,9 +58,19 @@ define(["messenger"], function(messenger, sightings) {
                 source: engine.ttAdapter(),
                 templates: {
                     empty: "<div class='tt-empty-results'>No results found.</div>",
-                    suggestion: _.compile("<%= val %>")
+                    suggestion: _.compile($("#suggestion-template").html())
                     // footer: "Footer",
                     // header: "header"
+            }
+        }).on("typeahead:selected", function(e, suggestion) {
+            switch(suggestion.type) {
+                case "bandnumber": 
+                    console.log("num")
+                break;
+                case "bandstring":
+                    console.log("str")
+                break;
+
             }
         })
     })
