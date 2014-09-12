@@ -68,7 +68,7 @@ input {
     }
 
     .tt-highlight {
-        background: #f2f2f0;
+        background: #B3D1FF;
     }
 }
 
@@ -86,16 +86,17 @@ ul#active-bird-list {
     li {
         @include transition(all .13s ease-in-out);
         @include border-radius(3px);
-        border: 1px solid #fff;
         display: inline-block;
         text-align: center;
         min-width: 100px;
         line-height: 1.5em;
-        background: #f9f9f9;
         margin: 3px 3px;
         padding: 0 6px;
+        border: 1px solid #fff;
+        background: #f9f9f9;
         background: rgba(255,255,255,.7);
         cursor: pointer;
+        position: relative;
 
         i {
             font-size: .8em;
@@ -110,6 +111,37 @@ ul#active-bird-list {
 
         &.genie-hide {
             @include transform(scale(0));
+        }
+
+        dl {
+            
+            display: none;
+            position: absolute;
+            top: 110%;
+            left: 0;
+            width: 100%;
+            border: 1px solid #fff;
+            background: #f9f9f9;
+            background: rgba(255,255,255,.7);
+
+            dt, dd {
+                display: block;
+                position: relative;
+                background: none;
+                border: none;
+
+                &:hover {
+                    background: none;
+                    border: none;
+                    @include box-shadow(none);
+                }
+            }
+            
+            dt {
+                border-bottom: 1px solid #ddd;
+                margin: 0 5px 5px;
+            }
+
         }
     }
 

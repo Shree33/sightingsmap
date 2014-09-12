@@ -95,19 +95,35 @@ define(["messenger"], function(messenger){
                 }, 200)
             })
         },
+        toggleBirdInfo: function() { 
+            var tooltip = this.$(".info-tooltip")
+            $(".info-tooltip").not("[data-bandnum=" + this.model.get("bandnumber") + "]").hide()
+            if (!tooltip.html()) {
+                tooltip.html(_.template($("#bird-info").html(), _.extend(
+                    this.model.toJSON(), {
+                        numsightings: this.model.get("sightings").length
+                    }
+                )
+                )).fadeIn("fast")
+            }
+            else {
+                tooltip.toggle("fast");
+            }
+        },
         render: function() {
             this.$el.html(_.template(this.template, this.model.toJSON()))
             return this;
         },
         events: {
-            "mouseenter": function() {
-                console.log("enter")
+            "click": function() { 
+                this.toggleBirdInfo()
             },
-            "mouseleave": function() {
-                console.log("exit")
-            },
-            "click .js-remove-bird": function() {
+            "click .js-remove-bird": function(e) {
                 this.model.collection.remove(this.model.cid)
+                e.stopPropagation();
+            },
+            "click .info-tooltip": function(e) {
+                e.stopPropagation();
             }
         }
     })

@@ -25,6 +25,15 @@
         </script>
         <script type="text/template" id='single-bird-listitem'>
             <%= bandnumber %> (<%= bandstring %>) <i class='js-remove-bird icon-close'></i>
+            <dl class='info-tooltip' data-bandnum='<%= bandnumber %>'></dl>
         </script>
+        <script type="text/template" id='bird-info'>
+            <dt>Band Number</dt>
+            <dd><%= bandnumber %></dd>
+            <dt>Number of Sightings</dt>
+            <dd><%= numsightings %></dd>
+
+        </script>
+
     </body>
 </html>

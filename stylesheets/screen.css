@@ -144,7 +144,7 @@ input {
 }
 /* line 70, ../sass/screen.scss */
 [class*=tt-dataset] .tt-highlight {
-  background: #f2f2f0;
+  background: #B3D1FF;
 }
 
 /* line 75, ../sass/screen.scss */
@@ -171,35 +171,67 @@ ul#active-bird-list li {
   -ms-border-radius: 3px;
   -o-border-radius: 3px;
   border-radius: 3px;
-  border: 1px solid #fff;
   display: inline-block;
   text-align: center;
   min-width: 100px;
   line-height: 1.5em;
-  background: #f9f9f9;
   margin: 3px 3px;
   padding: 0 6px;
+  border: 1px solid #fff;
+  background: #f9f9f9;
   background: rgba(255, 255, 255, 0.7);
   cursor: pointer;
+  position: relative;
 }
-/* line 100, ../sass/screen.scss */
+/* line 101, ../sass/screen.scss */
 ul#active-bird-list li i {
   font-size: .8em;
   color: #555;
   padding-left: 6px;
 }
-/* line 106, ../sass/screen.scss */
+/* line 107, ../sass/screen.scss */
 ul#active-bird-list li:hover {
   -webkit-box-shadow: 0px 1px 1px #999999;
   -moz-box-shadow: 0px 1px 1px #999999;
   box-shadow: 0px 1px 1px #999999;
   background: #fff;
 }
-/* line 111, ../sass/screen.scss */
+/* line 112, ../sass/screen.scss */
 ul#active-bird-list li.genie-hide {
   -webkit-transform: scale(0);
   -moz-transform: scale(0);
   -ms-transform: scale(0);
   -o-transform: scale(0);
   transform: scale(0);
+}
+/* line 116, ../sass/screen.scss */
+ul#active-bird-list li dl {
+  display: none;
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  border: 1px solid #fff;
+  background: #f9f9f9;
+  background: rgba(255, 255, 255, 0.7);
+}
+/* line 127, ../sass/screen.scss */
+ul#active-bird-list li dl dt, ul#active-bird-list li dl dd {
+  display: block;
+  position: relative;
+  background: none;
+  border: none;
+}
+/* line 133, ../sass/screen.scss */
+ul#active-bird-list li dl dt:hover, ul#active-bird-list li dl dd:hover {
+  background: none;
+  border: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+/* line 140, ../sass/screen.scss */
+ul#active-bird-list li dl dt {
+  border-bottom: 1px solid #ddd;
+  margin: 0 5px 5px;
 }
