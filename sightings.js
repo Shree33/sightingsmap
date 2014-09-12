@@ -85,10 +85,30 @@ define(["messenger"], function(messenger){
 
     var SingleBird = Backbone.View.extend({
         tagName: "li",
-        template: "<%= bandnumber %> (<%= bandstring %>)",
+        template: $("#single-bird-listitem").html(),
+        initialize: function() {
+            var that = this;
+            this.listenTo(this.model, "remove destroy", function() {
+                this.$el.addClass("genie-hide")
+                setTimeout(function() {
+                    that.remove();
+                }, 200)
+            })
+        },
         render: function() {
             this.$el.html(_.template(this.template, this.model.toJSON()))
             return this;
+        },
+        events: {
+            "mouseenter": function() {
+                console.log("enter")
+            },
+            "mouseleave": function() {
+                console.log("exit")
+            },
+            "click .js-remove-bird": function() {
+                this.model.collection.remove(this.model.cid)
+            }
         }
     })
 

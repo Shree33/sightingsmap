@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <title>Moor Hen Sightings</title>
         <link href="stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+        <link href="icomoon/style.css" media="screen, projection" rel="stylesheet" type="text/css" />
     </head>
     <body> 
         <div id='map-canvas-wrapper'>
@@ -21,6 +22,9 @@
         <script type='text/javascript' src='lib/require.js' data-main='main.js'></script>
         <script type="text/template" id='suggestion-template'>
             <%= val %>
+        </script>
+        <script type="text/template" id='single-bird-listitem'>
+            <%= bandnumber %> (<%= bandstring %>) <i class='js-remove-bird icon-close'></i>
         </script>
     </body>
 </html>
