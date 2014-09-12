@@ -15,41 +15,62 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
     })(window._);
 
     function parse(sightings) {
-        var tokenized = []
+        var addedPlaces = {};
+        var by_band = []
+        var by_place = []
         _.each(sightings, function(sighting) {
             var tokens = [sighting.get("ul"), sighting.get("ur"), sighting.get("lr"), sighting.get("ll")];
             var bandstring = sighting.getBandString();
-            var bandnumber = sighting.get("bandnumber")
-            tokenized.push({
+            var bandnumber = sighting.get("bandnumber");
+            var loc = sighting.get("sightinglocation");
+            by_band.push({
                 tokens: tokens,
                 val: bandstring,
                 type: "bandstring",
                 bandnumber: bandnumber
             });
-            tokenized.push({
+            by_band.push({
                 tokens: tokens,
                 val: new String(bandnumber),
                 type: 'bandnumber',
                 bandnumber: bandnumber
-            })
+            });
+            if (_.isUndefined(addedPlaces[loc])) {
+                addedPlaces[loc] = true;
+                by_place.push({
+                    tokens: [loc],
+                    val: loc,
+                    type: "location"
+                })
+            }
         })
-        return tokenized;
+        return {
+            by_band: by_band,
+            by_place: by_place
+        }
     }
     messenger.when("loaded:sightings", function(sightings) {
-        console.log("loaded")
-        var engine = new Bloodhound({
-            local: parse(sightings),
+        var tokens = parse(sightings);
+        var band_engine = new Bloodhound({
+            local: tokens.by_band,
             datumTokenizer: function(d) {
                 return Bloodhound.tokenizers.whitespace(d.val);
             },
-            queryTokenizer: function(str) {
-                return Bloodhound.tokenizers.whitespace(str)
-            },
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
             limit: 10
         });
+        band_engine.initialize()
 
-        engine.initialize()
-        engine.clearPrefetchCache();
+        var place_engine = new Bloodhound({
+            local: tokens.by_place,
+            datumTokenizer: function(d) {
+                return Bloodhound.tokenizers.whitespace(d.val);
+            },
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            limit: 10
+        });
+        place_engine.initialize()
+
 
 
         $searchbar.typeahead(
@@ -60,13 +81,21 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
             }, 
             {
                 displayKey: "val",
-                source: engine.ttAdapter(),
+                source: band_engine.ttAdapter(),
                 templates: {
                     empty: "<div class='tt-empty-results'>No results found.</div>",
-                    suggestion: _.compile($("#suggestion-template").html())
-                    // footer: "Footer",
-                    // header: "header"
-            }
+                    suggestion: _.compile($("#suggestion-template").html()),
+                    header: "<h2>By Bands</h2>"
+                }
+            },
+            {
+                displayKey: "val",
+                source: place_engine.ttAdapter(),
+                templates: {
+                    empty: "<div class='tt-empty-results'>No results found.</div>",
+                    suggestion: _.compile($("#suggestion-template").html()),
+                    header: "<h2>By Location</h2>"
+            },
         }).on("typeahead:selected", function(e, suggestion) {
             var bird = bird_data.getBirds()._byId[suggestion.bandnumber]
             switch(suggestion.type) {

@@ -67,14 +67,14 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   display: block;
 }
 
-/* line 9, ../sass/screen.scss */
+/* line 10, ../sass/screen.scss */
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
-/* line 13, ../sass/screen.scss */
+/* line 14, ../sass/screen.scss */
 html, body, #map-canvas, #map-canvas-wrapper {
   position: relative;
   width: 100%;
@@ -82,7 +82,7 @@ html, body, #map-canvas, #map-canvas-wrapper {
   font-family: sans-serif;
 }
 
-/* line 20, ../sass/screen.scss */
+/* line 21, ../sass/screen.scss */
 .twitter-typeahead {
   position: absolute !important;
   top: 20px;
@@ -91,7 +91,7 @@ html, body, #map-canvas, #map-canvas-wrapper {
   width: 400px;
 }
 
-/* line 28, ../sass/screen.scss */
+/* line 29, ../sass/screen.scss */
 input {
   -webkit-box-shadow: 0px 1px 4px #888888;
   -moz-box-shadow: 0px 1px 4px #888888;
@@ -105,7 +105,7 @@ input {
   text-indent: .7em;
 }
 
-/* line 40, ../sass/screen.scss */
+/* line 41, ../sass/screen.scss */
 .tt-dropdown-menu {
   border: 1px solid #e3e3e3;
   padding: 0;
@@ -113,7 +113,7 @@ input {
   background: #fff;
 }
 
-/* line 47, ../sass/screen.scss */
+/* line 48, ../sass/screen.scss */
 [class*=tt-dataset] {
   background: #fff;
   width: 100%;
@@ -121,7 +121,7 @@ input {
   padding: 0;
   font-size: 1.2rem;
 }
-/* line 54, ../sass/screen.scss */
+/* line 55, ../sass/screen.scss */
 [class*=tt-dataset] .tt-suggestion {
   line-height: 2em;
   text-indent: 1em;
@@ -130,37 +130,46 @@ input {
   cursor: pointer;
   text-align: left;
 }
-/* line 62, ../sass/screen.scss */
+/* line 63, ../sass/screen.scss */
 [class*=tt-dataset] .tt-suggestion:last-of-type {
   border-bottom: none;
 }
-/* line 63, ../sass/screen.scss */
+/* line 64, ../sass/screen.scss */
 [class*=tt-dataset] .tt-suggestion:first-of-type {
   border-top: none;
 }
-/* line 65, ../sass/screen.scss */
+/* line 66, ../sass/screen.scss */
 [class*=tt-dataset] .tt-suggestion:hover, [class*=tt-dataset] .tt-suggestion.tt-cursor {
   background: #e3e3e3;
 }
-/* line 70, ../sass/screen.scss */
+/* line 71, ../sass/screen.scss */
 [class*=tt-dataset] .tt-highlight {
   background: #B3D1FF;
 }
-
 /* line 75, ../sass/screen.scss */
+[class*=tt-dataset] h2 {
+  text-indent: 1rem;
+  background: #fff;
+  font-size: 1.4em;
+  margin: 5px 0;
+  padding: 5px 0;
+  background: #f2f2f0;
+}
+
+/* line 85, ../sass/screen.scss */
 .tt-empty-results {
   line-height: 3;
   text-indent: 0;
   text-align: center;
 }
 
-/* line 81, ../sass/screen.scss */
+/* line 91, ../sass/screen.scss */
 ul#active-bird-list {
   position: absolute;
   top: 19px;
   left: 510px;
 }
-/* line 86, ../sass/screen.scss */
+/* line 96, ../sass/screen.scss */
 ul#active-bird-list li {
   -webkit-transition: all 0.13s ease-in-out;
   -moz-transition: all 0.13s ease-in-out;
@@ -173,8 +182,8 @@ ul#active-bird-list li {
   border-radius: 3px;
   display: inline-block;
   text-align: center;
-  min-width: 100px;
-  line-height: 1.5em;
+  min-width: 185px;
+  line-height: 1.75em;
   margin: 3px 3px;
   padding: 5px 6px;
   border: 1px solid #fff;
@@ -183,20 +192,28 @@ ul#active-bird-list li {
   cursor: pointer;
   position: relative;
 }
-/* line 101, ../sass/screen.scss */
+/* line 111, ../sass/screen.scss */
 ul#active-bird-list li i {
+  -webkit-transition: color 0.2s ease-in-out;
+  -moz-transition: color 0.2s ease-in-out;
+  -o-transition: color 0.2s ease-in-out;
+  transition: color 0.2s ease-in-out;
   font-size: .8em;
   color: #555;
   padding-left: 6px;
 }
-/* line 107, ../sass/screen.scss */
+/* line 117, ../sass/screen.scss */
+ul#active-bird-list li i:hover {
+  color: #111;
+}
+/* line 122, ../sass/screen.scss */
 ul#active-bird-list li:hover {
   -webkit-box-shadow: 0px 1px 1px #999999;
   -moz-box-shadow: 0px 1px 1px #999999;
   box-shadow: 0px 1px 1px #999999;
   background: #fff;
 }
-/* line 112, ../sass/screen.scss */
+/* line 127, ../sass/screen.scss */
 ul#active-bird-list li.genie-hide {
   -webkit-transform: scale(0);
   -moz-transform: scale(0);
@@ -204,14 +221,14 @@ ul#active-bird-list li.genie-hide {
   -o-transform: scale(0);
   transform: scale(0);
 }
-/* line 116, ../sass/screen.scss */
+/* line 131, ../sass/screen.scss */
 ul#active-bird-list li dl {
   -webkit-box-shadow: 0px 1px 3px #aaaaaa;
   -moz-box-shadow: 0px 1px 3px #aaaaaa;
   box-shadow: 0px 1px 3px #aaaaaa;
   display: none;
   position: absolute;
-  top: 107%;
+  top: 101%;
   left: 0;
   width: 100%;
   background: #f9f9f9;
@@ -219,28 +236,28 @@ ul#active-bird-list li dl {
   cursor: auto;
   z-index: 99;
 }
-/* line 128, ../sass/screen.scss */
+/* line 143, ../sass/screen.scss */
 ul#active-bird-list li dl dt, ul#active-bird-list li dl dd {
   display: block;
   position: relative;
   background: none;
   border: none;
 }
-/* line 134, ../sass/screen.scss */
+/* line 149, ../sass/screen.scss */
 ul#active-bird-list li dl dt:hover, ul#active-bird-list li dl dd:hover {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
 }
-/* line 139, ../sass/screen.scss */
+/* line 154, ../sass/screen.scss */
 ul#active-bird-list li dl dt {
   border-bottom: 1px solid #ddd;
   border-top: 1px solid #ddd;
   margin: 0 0 10px;
-  background: #F16031;
+  background: #f16031;
   color: #fff;
 }
-/* line 147, ../sass/screen.scss */
+/* line 162, ../sass/screen.scss */
 ul#active-bird-list li dl dd {
   padding: 0 5px 10px;
 }

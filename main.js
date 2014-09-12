@@ -9,6 +9,7 @@ require.config({
     }
 })
 
-define(["moment", "map", "sightings", "search"], function(mom, Map){
+define(["moment", "map", "sightings", "search"], function(mom, Map, sightings){
     new Map(document.getElementById("map-canvas"));
+    sightings.initialize();
 })

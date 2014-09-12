@@ -12,7 +12,7 @@ define(["messenger"], function(messenger) {
             sightings.each(function(sighting) {
                 var marker = new google.maps.Marker({
                     position: new google.maps.LatLng(sighting.get("lat"), sighting.get("lng")),
-                    title: "Hello",
+                    title: sighting.get("bandnumber") + " sighted here",
                     animation: google.maps.Animation.DROP
                 })
                 marker.setMap(that.map);

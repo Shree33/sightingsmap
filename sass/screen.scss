@@ -5,6 +5,7 @@
 
 @import "compass/reset";
 @import "compass/css3";
+$orange: #F16031;
 
 * {
     @include box-sizing(border-box);
@@ -70,6 +71,15 @@ input {
     .tt-highlight {
         background: #B3D1FF;
     }
+
+    h2 {
+        text-indent: 1rem;
+        background: #fff;
+        font-size: 1.4em;
+        margin: 5px 0;
+        padding: 5px 0;
+        background: #f2f2f0;
+    }
 }
 
 .tt-empty-results {
@@ -88,8 +98,8 @@ ul#active-bird-list {
         @include border-radius(3px);
         display: inline-block;
         text-align: center;
-        min-width: 100px;
-        line-height: 1.5em;
+        min-width: 185px;
+        line-height: 1.75em;
         margin: 3px 3px;
         padding: 5px 6px;
         border: 1px solid #fff;
@@ -99,9 +109,14 @@ ul#active-bird-list {
         position: relative;
 
         i {
+            @include transition(color .2s ease-in-out);
             font-size: .8em;
             color: #555;
             padding-left: 6px;
+
+            &:hover {
+                color: #111;
+            }
         }
 
         &:hover {
@@ -117,7 +132,7 @@ ul#active-bird-list {
             @include box-shadow(0px 1px 3px #aaa);
             display: none;
             position: absolute;
-            top: 107%;
+            top: 101%;
             left: 0;
             width: 100%;
             background: #f9f9f9;
@@ -140,7 +155,7 @@ ul#active-bird-list {
                 border-bottom: 1px solid #ddd;
                 border-top: 1px solid #ddd;
                 margin: 0 0 10px;
-                background: #F16031;
+                background: $orange;
                 color: #fff;
             }
 

@@ -32,7 +32,6 @@ define(["messenger"], function(messenger){
     })
 
     var Sighting = Backbone.Model.extend({
-        idAttribute: 'bandnumber',
         initialize: function(){
             var bird = birds._byId[this.get("bird_id")]
             if (_.isUndefined(bird)) {
@@ -49,7 +48,7 @@ define(["messenger"], function(messenger){
         parse: function(r) {
             var p = "gsx$";
             // Get only relevant properties
-            var sanitized = _.pick(r, p+"lat", p+"lng", p+"ll", p+"lr", p+"ul", p+"ur", p+"locationbanded", p+"sightingdate", p+"bandnumber" )
+            var sanitized = _.pick(r, p+"lat", p+"lng", p+"ll", p+"lr", p+"ul", p+"ur", p+"sightinglocation", p+"sightingdate", p+"bandnumber" )
             // Get values from sub-objects
             _.each(sanitized, function(val, key) {
                 sanitized[key] = val.$t;
@@ -57,20 +56,22 @@ define(["messenger"], function(messenger){
                     sanitized[key] = location_shortcuts[sanitized[key]]
                 }
             })
-            var bandnum = sanitized["gsx$bandnumber"]
-            var date = moment(sanitized["gsx$sightingdate"])
+            var bandnum = sanitized[p+"bandnumber"]
+            var date = moment(sanitized[p+"sightingdate"])
             sanitized = _.invert(sanitized)
             // Strip gsx prefixes
             _.each(sanitized, function(val, key) {
                 sanitized[key] = val.replace(p, "");
             })
-            return _.extend(parseNums(_.invert(sanitized)), {sightingdate: date, bird_id: bandnum})
+            var las =  _.extend(parseNums(_.invert(sanitized)), {sightingdate: date, bird_id: bandnum})
+            console.log(las);
+            return las
         },
         getBandString: function() {
-            var ul = this.get("ul") || "_";
-            var ur = this.get("ur") || "_";
-            var lr = this.get("lr") || "_";
-            var ll = this.get("ll") || "_";
+            var ul = this.get("ul") || "X";
+            var ll = this.get("ll") || "X";
+            var ur = this.get("ur") || "X";
+            var lr = this.get("lr") || "X";
             return ul + ll + ur + lr;
         }
     });
@@ -107,7 +108,7 @@ define(["messenger"], function(messenger){
                 tooltip.html(_.template($("#bird-info").html(), _.extend(
                     this.model.toJSON(), {
                         numsightings: this.model.get("sightings").length,
-                        taggedat: this.model.get("sightings").at(0).get("locationbanded")
+                        taggedat: this.model.get("sightings").at(0).get("sightinglocation")
                     }
                 )
                 )).fadeIn("fast")
@@ -180,14 +181,21 @@ define(["messenger"], function(messenger){
     var birds = new Birds()
     var sightings = new Sightings()
     new BirdList({collection: new Birds()});
-    sightings.fetch({
-        parse: true
-    }).success(function() {
-        messenger.dispatch("loaded:sightings", sightings.models)
-        console.log(sightings.at(0));
-    }).fail(function() {
-        console.log(arguments)
-    })
+    function initialize() {
+        sightings.fetch({
+            parse: true,
+            cache: false,
+            sort: false
+        }).success(function() {
+            console.log(arguments[0])
+            messenger.dispatch("loaded:sightings", sightings.models)
+            console.log(sightings.filter(function(mod) {
+                return mod.getBandString() === "WXOA";
+            }))
+        }).fail(function() {
+            console.log(arguments)
+        })
+    }
 
     return {
         getBirds: function() {
@@ -195,6 +203,9 @@ define(["messenger"], function(messenger){
         },
         getSightings: function() {
             return sightings;
+        },
+        initialize: function() {
+            return initialize();
         }
     }
 })
