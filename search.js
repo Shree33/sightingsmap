@@ -77,6 +77,7 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
                     }
                 break;
             }
+            $searchbar.typeahead("val", "")
         })
     })
 })

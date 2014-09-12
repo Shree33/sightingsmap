@@ -89,6 +89,11 @@ define(["messenger"], function(messenger){
         initialize: function() {
             var that = this;
             this.listenTo(this.model, "remove destroy", function() {
+                this.model.get("sightings").each(function(sighting) {
+                    if (sighting.marker) {
+                        sighting.marker.setMap(null);
+                    }
+                })
                 this.$el.addClass("genie-hide")
                 setTimeout(function() {
                     that.remove();
@@ -101,7 +106,8 @@ define(["messenger"], function(messenger){
             if (!tooltip.html()) {
                 tooltip.html(_.template($("#bird-info").html(), _.extend(
                     this.model.toJSON(), {
-                        numsightings: this.model.get("sightings").length
+                        numsightings: this.model.get("sightings").length,
+                        taggedat: this.model.get("sightings").at(0).get("locationbanded")
                     }
                 )
                 )).fadeIn("fast")
@@ -115,6 +121,22 @@ define(["messenger"], function(messenger){
             return this;
         },
         events: {
+            "mouseenter": function() {
+                this.model.get("sightings").each(function(sighting) {
+                    if (sighting.marker) {
+                        sighting.marker.setZIndex(9);
+                        sighting.marker.setIcon("images/bluepoi.png");
+                    }
+                })
+            },
+            "mouseleave": function() {
+                this.model.get("sightings").each(function(sighting) {
+                    if (sighting.marker) {
+                        sighting.marker.setZIndex(1);
+                        sighting.marker.setIcon(null);
+                    }
+                })
+            },
             "click": function() { 
                 this.toggleBirdInfo()
             },

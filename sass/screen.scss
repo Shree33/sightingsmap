@@ -80,7 +80,7 @@ input {
 
 ul#active-bird-list {
     position: absolute;
-    top: 25px;
+    top: 19px;
     left: 510px;
 
     li {
@@ -91,7 +91,7 @@ ul#active-bird-list {
         min-width: 100px;
         line-height: 1.5em;
         margin: 3px 3px;
-        padding: 0 6px;
+        padding: 5px 6px;
         border: 1px solid #fff;
         background: #f9f9f9;
         background: rgba(255,255,255,.7);
@@ -114,15 +114,16 @@ ul#active-bird-list {
         }
 
         dl {
-            
+            @include box-shadow(0px 1px 3px #aaa);
             display: none;
             position: absolute;
-            top: 110%;
+            top: 107%;
             left: 0;
             width: 100%;
-            border: 1px solid #fff;
             background: #f9f9f9;
-            background: rgba(255,255,255,.7);
+            background: rgba(255,255,255,.9);
+            cursor: auto;
+            z-index: 99;
 
             dt, dd {
                 display: block;
@@ -131,15 +132,20 @@ ul#active-bird-list {
                 border: none;
 
                 &:hover {
-                    background: none;
-                    border: none;
                     @include box-shadow(none);
                 }
             }
             
             dt {
                 border-bottom: 1px solid #ddd;
-                margin: 0 5px 5px;
+                border-top: 1px solid #ddd;
+                margin: 0 0 10px;
+                background: #F16031;
+                color: #fff;
+            }
+
+            dd {
+                padding: 0 5px 10px;
             }
 
         }
