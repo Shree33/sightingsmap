@@ -48,24 +48,18 @@ define(["messenger"], function(messenger){
         parse: function(r) {
             var p = "gsx$";
             // Get only relevant properties
-            var sanitized = _.pick(r, p+"lat", p+"lng", p+"ll", p+"lr", p+"ul", p+"ur", p+"sightinglocation", p+"sightingdate", p+"bandnumber" )
-            // Get values from sub-objects
+            var sanitized = _.pick(r, p+"lat", p+"lng", p+"ll", p+"lr", p+"ul", p+"ur", p+"sightinglocation", p+"date", p+"bandnumber")
+            // Parse location shortcuts
             _.each(sanitized, function(val, key) {
-                sanitized[key] = val.$t;
+                sanitized[key.replace(p, "")] = val.$t;
                 if (location_shortcuts[sanitized[key]]) {
                     sanitized[key] = location_shortcuts[sanitized[key]]
                 }
-            })
-            var bandnum = sanitized[p+"bandnumber"]
-            var date = moment(sanitized[p+"sightingdate"])
-            sanitized = _.invert(sanitized)
-            // Strip gsx prefixes
-            _.each(sanitized, function(val, key) {
-                sanitized[key] = val.replace(p, "");
-            })
-            var las =  _.extend(parseNums(_.invert(sanitized)), {sightingdate: date, bird_id: bandnum})
-            console.log(las);
-            return las
+            });
+            var bandnum = sanitized["bandnumber"]
+            var date = moment(sanitized["date"])
+
+            return  _.extend(parseNums(sanitized), {date: date, bird_id: bandnum})
         },
         getBandString: function() {
             var ul = this.get("ul") || "X";
@@ -73,6 +67,9 @@ define(["messenger"], function(messenger){
             var ur = this.get("ur") || "X";
             var lr = this.get("lr") || "X";
             return ul + ll + ur + lr;
+        },
+        hasLocation: function() {
+            return !_.isUndefined(this.get("lat")) && !_.isUndefined(this.get("lng"));
         }
     });
 
@@ -187,11 +184,7 @@ define(["messenger"], function(messenger){
             cache: false,
             sort: false
         }).success(function() {
-            console.log(arguments[0])
             messenger.dispatch("loaded:sightings", sightings.models)
-            console.log(sightings.filter(function(mod) {
-                return mod.getBandString() === "WXOA";
-            }))
         }).fail(function() {
             console.log(arguments)
         })

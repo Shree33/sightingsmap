@@ -18,6 +18,9 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
         var addedPlaces = {};
         var by_band = []
         var by_place = []
+        console.log(_.filter(sightings, function(thing) {
+            return (thing.get("ur") + thing.get("lr")) === "OA"
+        }));
         _.each(sightings, function(sighting) {
             var tokens = [sighting.get("ul"), sighting.get("ur"), sighting.get("lr"), sighting.get("ll")];
             var bandstring = sighting.getBandString();

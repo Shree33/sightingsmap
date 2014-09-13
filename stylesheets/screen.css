@@ -261,3 +261,19 @@ ul#active-bird-list li dl dt {
 ul#active-bird-list li dl dd {
   padding: 0 5px 10px;
 }
+
+/* line 171, ../sass/screen.scss */
+footer {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  width: 600px;
+  background: #f9f9f9;
+  background: rgba(255, 255, 255, 0.7);
+  height: 100px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+}
