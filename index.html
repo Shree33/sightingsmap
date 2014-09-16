@@ -17,9 +17,9 @@
                 <div class="timeline-slider" ></div> 
               </div>
               <ul class='timeline-controls'>
-                <li class='js-rewind icon-untitled-2 js-speed-control' dir='back' speed='1x' data-tooltip='Rewind Timeline'></li>
+                <li class='js-rewind icon-backward js-speed-control' dir='back' speed='1x' data-tooltip='Rewind Timeline'></li>
                 <li class='js-play-timeline icon-play' data-switch-icon="icon-pause" data-tooltip='Play Timeline'></li>
-                <li class='js-fast-forward icon-untitled js-speed-control' dir='forward' speed='1x' data-tooltip='Fast Forward Timeline'></li>
+                <li class='js-fast-forward icon-forward js-speed-control' dir='forward' speed='1x' data-tooltip='Fast Forward Timeline'></li>
               </ul>
             </footer>
         </div>
@@ -34,12 +34,11 @@
             <%= val %>
         </script>
         <script type="text/template" id='single-bird-listitem'>
-            <%= bandnumber %> (<%= bandstring %>) <i class='js-remove-bird icon-close'></i>
+            <%= bandstring %> (<%= bandnumber %>) 
+            <i class='js-remove-bird icon-close'></i>
             <dl class='info-tooltip' data-bandnum='<%= bandnumber %>'></dl>
         </script>
         <script type="text/template" id='bird-info'>
-            <dt>Band Number</dt>
-            <dd><%= bandnumber %></dd>
             <dt>Number of Sightings</dt>
             <dd><%= numsightings %></dd>
             <dt>Banded At</dt>

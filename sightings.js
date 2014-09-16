@@ -15,6 +15,21 @@ define(["messenger"], function(messenger){
         "JCNWR": "James Campebell National Wildlife Refuge"
     }
 
+    function getNextMarkerUrl() {
+        var markers = [null, "bluepoi", "sienna", "turquoise", "purplepoi"];
+        var i = 0;
+
+        return function() {
+            var index = i++ % 5;
+            if (index === 0) {
+                return null;
+            }
+            else {
+                return "images/" + markers[index] + ".png";
+            }
+        }
+    }
+
     // Bird has many sightings
     var Bird = Backbone.Model.extend({
         defaults: function() {
@@ -28,7 +43,13 @@ define(["messenger"], function(messenger){
         }
     })
     var Birds = Backbone.Collection.extend({
-        model: Bird
+        model: Bird,
+        initialize: function() {
+            var next = getNextMarkerUrl();
+            this.on("add", function(bird) {
+                bird.marker_url = next()
+            })
+        }
     })
 
     var Sighting = Backbone.Model.extend({
@@ -53,13 +74,15 @@ define(["messenger"], function(messenger){
             _.each(sanitized, function(val, key) {
                 sanitized[key.replace(p, "")] = val.$t;
                 if (location_shortcuts[sanitized[key]]) {
-                    sanitized[key] = location_shortcuts[sanitized[key]]
+                    sanitized[key.replace(p, "")] = location_shortcuts[sanitized[key]]
                 }
             });
             var bandnum = sanitized["bandnumber"]
             var date = moment(sanitized["date"])
 
-            return  _.extend(parseNums(sanitized), {date: date, bird_id: bandnum})
+            return  _.omit(_.extend(parseNums(sanitized), {date: date, bird_id: bandnum}), function(value, key) {
+                key.indexOf(p) !== -1;
+            });
         },
         getBandString: function() {
             var ul = this.get("ul") || "X";
@@ -75,27 +98,47 @@ define(["messenger"], function(messenger){
 
     var Sightings = Backbone.Collection.extend({
         model: Sighting,
-        url: "https://spreadsheets.google.com/feeds/list/17fGFqzDS8uOQKmAXRjCscY_f4l85XjEtTsvlawUYwN0/o39yaik/public/values?alt=json",
         parse: function(response) {
             return response.feed.entry
         }
     });
+
+    $.ajax({
+        url: "obfuscation.txt",
+        type: "GET",
+        cache: false,
+        success: function(datum) {
+            Sightings.prototype.url = datum;
+            console.log("yolo");
+            messenger.dispatch("loaded:datum");
+        }
+    })
 
     var SingleBird = Backbone.View.extend({
         tagName: "li",
         template: $("#single-bird-listitem").html(),
         initialize: function() {
             var that = this;
-            this.listenTo(this.model, "remove destroy", function() {
-                this.model.get("sightings").each(function(sighting) {
-                    if (sighting.marker) {
-                        sighting.marker.setMap(null);
-                    }
-                })
-                this.$el.addClass("genie-hide")
-                setTimeout(function() {
-                    that.remove();
-                }, 200)
+            this.listenTo(this.model, {
+                "remove destroy": function() {
+                    this.model.get("sightings").each(function(sighting) {
+                        sighting.allsightings.remove(sighting);
+                        if (sighting.marker) {
+                            sighting.marker.setMap(null);
+                        }
+                    })
+                    this.$el.addClass("genie-hide")
+                    setTimeout(function() {
+                        that.remove();
+                    }, 200)
+                },
+                "bounce": function() {
+                    var $el = this.$el;
+                    $el.addClass("already-selected");
+                    setTimeout(function() {
+                        $el.removeClass("already-selected");
+                    }, 3000)
+                }
             })
         },
         toggleBirdInfo: function() { 
@@ -111,27 +154,35 @@ define(["messenger"], function(messenger){
                 )).fadeIn("fast")
             }
             else {
-                tooltip.toggle("fast");
+                tooltip.fadeToggle("fast");
             }
         },
         render: function() {
             this.$el.html(_.template(this.template, this.model.toJSON()))
+            this.$el.addClass("color " + new String(this.model.marker_url).replace(".png", "").replace("images/", ""));
             return this;
         },
         events: {
             "mouseenter": function() {
+                var that = this;
                 this.model.get("sightings").each(function(sighting) {
                     if (sighting.marker) {
+                        that.mouseentertime = new Date().getTime();
                         sighting.marker.setZIndex(9);
-                        sighting.marker.setIcon("images/bluepoi.png");
+                        sighting.marker.setAnimation(google.maps.Animation.BOUNCE)
                     }
                 })
             },
             "mouseleave": function() {
+                var that = this;
+                var now = new Date().getTime();
                 this.model.get("sightings").each(function(sighting) {
                     if (sighting.marker) {
+                        var bounce_diff = (now - that.mouseentertime) % 750;
                         sighting.marker.setZIndex(1);
-                        sighting.marker.setIcon(null);
+                        setTimeout(function() {
+                            sighting.marker.setAnimation(null)
+                        }, 750 - bounce_diff - 40)
                     }
                 })
             },
@@ -139,7 +190,19 @@ define(["messenger"], function(messenger){
                 this.toggleBirdInfo()
             },
             "click .js-remove-bird": function(e) {
-                this.model.collection.remove(this.model.cid)
+                this.model.birdlist_collection.remove(this.model.cid);
+                var that = this;
+                this.model.get("sightings").each(function(sighting) {
+                    sighting.allsightings.remove(sighting);
+                    sighting.marker = void 0
+                    if (sighting.marker) {
+                        sighting.marker.setMap(null);
+                    }
+                })
+                this.$el.addClass("genie-hide")
+                setTimeout(function() {
+                    that.remove();
+                }, 200)
                 e.stopPropagation();
             },
             "click .info-tooltip": function(e) {
@@ -155,8 +218,11 @@ define(["messenger"], function(messenger){
             this.listenTo(messenger, "show:sightings", function(sightings) {
                 sightings.each(function(sighting) {
                     var bird = sighting.bird;
-                    that.collection.add(bird);
-
+                    if (bird) {
+                        bird.birdlist_collection = that.collection
+                        that.collection.add(bird);    
+                    }
+                    
                 })
             })
             this.listenTo(this.collection, {

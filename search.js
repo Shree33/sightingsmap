@@ -18,9 +18,7 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
         var addedPlaces = {};
         var by_band = []
         var by_place = []
-        console.log(_.filter(sightings, function(thing) {
-            return (thing.get("ur") + thing.get("lr")) === "OA"
-        }));
+
         _.each(sightings, function(sighting) {
             var tokens = [sighting.get("ul"), sighting.get("ur"), sighting.get("lr"), sighting.get("ll")];
             var bandstring = sighting.getBandString();
@@ -30,13 +28,15 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
                 tokens: tokens,
                 val: bandstring,
                 type: "bandstring",
-                bandnumber: bandnumber
+                bandnumber: bandnumber,
+                model: sighting
             });
             by_band.push({
                 tokens: tokens,
                 val: new String(bandnumber),
                 type: 'bandnumber',
-                bandnumber: bandnumber
+                bandnumber: bandnumber,
+                model: sighting
             });
             if (_.isUndefined(addedPlaces[loc])) {
                 addedPlaces[loc] = true;
@@ -104,8 +104,9 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
             switch(suggestion.type) {
                 case "bandnumber": 
                 case "bandstring":
+                    console.log(bird);
                     if (bird) {
-                        messenger.dispatch("show:sightings", bird.get("sightings"));
+                        messenger.dispatch("show:sightings", bird.get("sightings"), bird);
                     }
                 break;
             }

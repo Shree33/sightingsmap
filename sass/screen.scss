@@ -6,6 +6,11 @@
 @import "compass/reset";
 @import "compass/css3";
 $orange: #F16031;
+$bluepoi: #5c95e1;
+$normalpoi: #F75C54;
+$turquoise: #799b9b;
+$purple: #af99e2;
+$sienna: #642300;
 
 * {
     @include box-sizing(border-box);
@@ -88,9 +93,28 @@ input {
     text-align: center;
 }
 
+@keyframes bounce {
+    from {
+        @include transform(scale(1));
+    }
+    to {
+        @include transform(scale(1.07));
+    }
+}
+
+@-webkit-keyframes bounce {
+    from {
+        @include transform(scale(1));
+    }
+    to {
+        @include transform(scale(1.07));
+    }
+}
+
 ul#active-bird-list {
     position: absolute;
     top: 19px;
+    z-index: 100;
     left: 510px;
 
     li {
@@ -107,6 +131,44 @@ ul#active-bird-list {
         background: rgba(255,255,255,.7);
         cursor: pointer;
         position: relative;
+
+        &.color {
+            border-bottom-width: 3px;
+
+            &.null {
+                border-color: $normalpoi;
+                color: $normalpoi; 
+            }
+
+            &.turquoise {
+                border-color: $turquoise;
+                color: $turquoise; 
+            }
+
+            &.sienna {
+                border-color: $sienna;
+                color: $sienna; 
+            }
+
+            &.bluepoi {
+                border-color: $bluepoi;
+                color: $bluepoi;
+            }
+
+            &.purplepoi {
+                border-color: $purple;
+                color: $purple; 
+
+            }
+        }
+
+        &.already-selected {
+            animation: bounce .5s infinite alternate;
+            -webkit-animation: bounce .5s infinite alternate;
+            -moz-animation: bounce .5s infinite alternate;
+            background: #fff;
+            color: $orange;
+        }
 
         i {
             @include transition(color .2s ease-in-out);
@@ -165,7 +227,6 @@ ul#active-bird-list {
 
         }
     }
-
 }
 
 footer {
@@ -175,6 +236,48 @@ footer {
     width: 600px;
     background: #f9f9f9;
     background: rgba(255,255,255,.7);
-    height: 100px;
     @include border-radius(3px);
+    display: none;
 }
+
+.slider-wrap {
+    position: relative;
+
+    .ui-slider-handle {
+        
+    }
+
+    .handle-display-value {
+        @include border-radius(3px);
+        text-shadow: none;
+        position: absolute;
+        top: -26px;
+        padding: 4px;
+        background: #222;
+        background: rgba(0,0,0,.5);
+        color: #f2f2f0;
+    }
+
+}
+
+.timeline-marker {
+    position: absolute;
+    z-index: 99;
+    width: 4px;
+    background: #fff;
+    border: 1px solid #333;
+    height: 14px;
+    top: 0;
+}
+
+.timeline-controls {
+    margin: 10px 0;
+    li {
+        display: inline-block;
+        text-align: center;
+        width: 32%;
+        margin: 0;
+        font-size: 1.4em;
+    }
+}
+

@@ -19,7 +19,6 @@ define(["messenger"], function(messenger){
         cleaned = moment(range[pos]).format("M/D");
         display = $("<div/>").addClass("handle-display-value").text(cleaned);
         handle.find("div").remove().end().append(display);
-        console.log(self.collection)
         messenger.dispatch("toggle:markers", ui.values[0], ui.values[1]);
       };
       this.$timeline = this.$(".timeline-slider");
@@ -59,9 +58,6 @@ define(["messenger"], function(messenger){
       $slider = this.$(".slider-wrap");
       width = $slider.width();
       pos = new Date(model.get("date")).getTime();
-      console.log(this.min, this.max)
-      console.log(moment(this.min).format("MM-DD-YYYY"))
-      console.log(moment(this.max).format("MM-DD-YYYY"))
       range = this.max - this.min;
       pos -= this.min;
       pos /= range;
@@ -125,7 +121,11 @@ define(["messenger"], function(messenger){
     updateHandles: function() {
       var $timeline, handles, max, maxdate, min, mindate, prevcomparator;
       if (this.collection.length < 2) {
+        this.$el.fadeOut("fast");
         return this;
+      }
+      else {
+        this.$el.fadeIn("fast");
       }
       prevcomparator = this.collection.comparator;
       this.collection.comparator = function(model) {
@@ -219,10 +219,10 @@ var TimelineMarker = Backbone.View.extend({
     initialize: function(attrs) {
       _.extend(this, attrs);
       return this.listenTo(this.model, {
-        "hide": function() {
+        "hide:marker": function() {
           return this.$el.hide();
         },
-        "show": function() {
+        "show:marker": function() {
           return this.$el.show();
         },
         "highlight": function() {
@@ -243,7 +243,6 @@ var TimelineMarker = Backbone.View.extend({
     render: function() {
       var $el, num;
       num = this.left;
-      console.log(num);
       $el = this.$el;
       $el.css('left', (num * 100) + "%");
       $el.html(_.template(this.template, {

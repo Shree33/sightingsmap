@@ -67,14 +67,14 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   display: block;
 }
 
-/* line 10, ../sass/screen.scss */
+/* line 15, ../sass/screen.scss */
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
-/* line 14, ../sass/screen.scss */
+/* line 19, ../sass/screen.scss */
 html, body, #map-canvas, #map-canvas-wrapper {
   position: relative;
   width: 100%;
@@ -82,7 +82,7 @@ html, body, #map-canvas, #map-canvas-wrapper {
   font-family: sans-serif;
 }
 
-/* line 21, ../sass/screen.scss */
+/* line 26, ../sass/screen.scss */
 .twitter-typeahead {
   position: absolute !important;
   top: 20px;
@@ -91,7 +91,7 @@ html, body, #map-canvas, #map-canvas-wrapper {
   width: 400px;
 }
 
-/* line 29, ../sass/screen.scss */
+/* line 34, ../sass/screen.scss */
 input {
   -webkit-box-shadow: 0px 1px 4px #888888;
   -moz-box-shadow: 0px 1px 4px #888888;
@@ -105,7 +105,7 @@ input {
   text-indent: .7em;
 }
 
-/* line 41, ../sass/screen.scss */
+/* line 46, ../sass/screen.scss */
 .tt-dropdown-menu {
   border: 1px solid #e3e3e3;
   padding: 0;
@@ -113,7 +113,7 @@ input {
   background: #fff;
 }
 
-/* line 48, ../sass/screen.scss */
+/* line 53, ../sass/screen.scss */
 [class*=tt-dataset] {
   background: #fff;
   width: 100%;
@@ -121,7 +121,7 @@ input {
   padding: 0;
   font-size: 1.2rem;
 }
-/* line 55, ../sass/screen.scss */
+/* line 60, ../sass/screen.scss */
 [class*=tt-dataset] .tt-suggestion {
   line-height: 2em;
   text-indent: 1em;
@@ -130,23 +130,23 @@ input {
   cursor: pointer;
   text-align: left;
 }
-/* line 63, ../sass/screen.scss */
+/* line 68, ../sass/screen.scss */
 [class*=tt-dataset] .tt-suggestion:last-of-type {
   border-bottom: none;
 }
-/* line 64, ../sass/screen.scss */
+/* line 69, ../sass/screen.scss */
 [class*=tt-dataset] .tt-suggestion:first-of-type {
   border-top: none;
 }
-/* line 66, ../sass/screen.scss */
+/* line 71, ../sass/screen.scss */
 [class*=tt-dataset] .tt-suggestion:hover, [class*=tt-dataset] .tt-suggestion.tt-cursor {
   background: #e3e3e3;
 }
-/* line 71, ../sass/screen.scss */
+/* line 76, ../sass/screen.scss */
 [class*=tt-dataset] .tt-highlight {
   background: #B3D1FF;
 }
-/* line 75, ../sass/screen.scss */
+/* line 80, ../sass/screen.scss */
 [class*=tt-dataset] h2 {
   text-indent: 1rem;
   background: #fff;
@@ -156,20 +156,61 @@ input {
   background: #f2f2f0;
 }
 
-/* line 85, ../sass/screen.scss */
+/* line 90, ../sass/screen.scss */
 .tt-empty-results {
   line-height: 3;
   text-indent: 0;
   text-align: center;
 }
 
-/* line 91, ../sass/screen.scss */
+@keyframes bounce {
+  /* line 97, ../sass/screen.scss */
+  from {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1);
+  }
+
+  /* line 100, ../sass/screen.scss */
+  to {
+    -webkit-transform: scale(1.07);
+    -moz-transform: scale(1.07);
+    -ms-transform: scale(1.07);
+    -o-transform: scale(1.07);
+    transform: scale(1.07);
+  }
+}
+
+@-webkit-keyframes bounce {
+  /* line 106, ../sass/screen.scss */
+  from {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1);
+  }
+
+  /* line 109, ../sass/screen.scss */
+  to {
+    -webkit-transform: scale(1.07);
+    -moz-transform: scale(1.07);
+    -ms-transform: scale(1.07);
+    -o-transform: scale(1.07);
+    transform: scale(1.07);
+  }
+}
+
+/* line 114, ../sass/screen.scss */
 ul#active-bird-list {
   position: absolute;
   top: 19px;
+  z-index: 100;
   left: 510px;
 }
-/* line 96, ../sass/screen.scss */
+/* line 120, ../sass/screen.scss */
 ul#active-bird-list li {
   -webkit-transition: all 0.13s ease-in-out;
   -moz-transition: all 0.13s ease-in-out;
@@ -192,7 +233,44 @@ ul#active-bird-list li {
   cursor: pointer;
   position: relative;
 }
-/* line 111, ../sass/screen.scss */
+/* line 135, ../sass/screen.scss */
+ul#active-bird-list li.color {
+  border-bottom-width: 3px;
+}
+/* line 138, ../sass/screen.scss */
+ul#active-bird-list li.color.null {
+  border-color: #f75c54;
+  color: #f75c54;
+}
+/* line 143, ../sass/screen.scss */
+ul#active-bird-list li.color.turquoise {
+  border-color: #799b9b;
+  color: #799b9b;
+}
+/* line 148, ../sass/screen.scss */
+ul#active-bird-list li.color.sienna {
+  border-color: #642300;
+  color: #642300;
+}
+/* line 153, ../sass/screen.scss */
+ul#active-bird-list li.color.bluepoi {
+  border-color: #5c95e1;
+  color: #5c95e1;
+}
+/* line 158, ../sass/screen.scss */
+ul#active-bird-list li.color.purplepoi {
+  border-color: #af99e2;
+  color: #af99e2;
+}
+/* line 165, ../sass/screen.scss */
+ul#active-bird-list li.already-selected {
+  animation: bounce .5s infinite alternate;
+  -webkit-animation: bounce .5s infinite alternate;
+  -moz-animation: bounce .5s infinite alternate;
+  background: #fff;
+  color: #f16031;
+}
+/* line 173, ../sass/screen.scss */
 ul#active-bird-list li i {
   -webkit-transition: color 0.2s ease-in-out;
   -moz-transition: color 0.2s ease-in-out;
@@ -202,18 +280,18 @@ ul#active-bird-list li i {
   color: #555;
   padding-left: 6px;
 }
-/* line 117, ../sass/screen.scss */
+/* line 179, ../sass/screen.scss */
 ul#active-bird-list li i:hover {
   color: #111;
 }
-/* line 122, ../sass/screen.scss */
+/* line 184, ../sass/screen.scss */
 ul#active-bird-list li:hover {
   -webkit-box-shadow: 0px 1px 1px #999999;
   -moz-box-shadow: 0px 1px 1px #999999;
   box-shadow: 0px 1px 1px #999999;
   background: #fff;
 }
-/* line 127, ../sass/screen.scss */
+/* line 189, ../sass/screen.scss */
 ul#active-bird-list li.genie-hide {
   -webkit-transform: scale(0);
   -moz-transform: scale(0);
@@ -221,7 +299,7 @@ ul#active-bird-list li.genie-hide {
   -o-transform: scale(0);
   transform: scale(0);
 }
-/* line 131, ../sass/screen.scss */
+/* line 193, ../sass/screen.scss */
 ul#active-bird-list li dl {
   -webkit-box-shadow: 0px 1px 3px #aaaaaa;
   -moz-box-shadow: 0px 1px 3px #aaaaaa;
@@ -236,20 +314,20 @@ ul#active-bird-list li dl {
   cursor: auto;
   z-index: 99;
 }
-/* line 143, ../sass/screen.scss */
+/* line 205, ../sass/screen.scss */
 ul#active-bird-list li dl dt, ul#active-bird-list li dl dd {
   display: block;
   position: relative;
   background: none;
   border: none;
 }
-/* line 149, ../sass/screen.scss */
+/* line 211, ../sass/screen.scss */
 ul#active-bird-list li dl dt:hover, ul#active-bird-list li dl dd:hover {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
 }
-/* line 154, ../sass/screen.scss */
+/* line 216, ../sass/screen.scss */
 ul#active-bird-list li dl dt {
   border-bottom: 1px solid #ddd;
   border-top: 1px solid #ddd;
@@ -257,12 +335,12 @@ ul#active-bird-list li dl dt {
   background: #f16031;
   color: #fff;
 }
-/* line 162, ../sass/screen.scss */
+/* line 224, ../sass/screen.scss */
 ul#active-bird-list li dl dd {
   padding: 0 5px 10px;
 }
 
-/* line 171, ../sass/screen.scss */
+/* line 232, ../sass/screen.scss */
 footer {
   position: absolute;
   bottom: 20px;
@@ -270,10 +348,54 @@ footer {
   width: 600px;
   background: #f9f9f9;
   background: rgba(255, 255, 255, 0.7);
-  height: 100px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   -ms-border-radius: 3px;
   -o-border-radius: 3px;
   border-radius: 3px;
+  display: none;
+}
+
+/* line 243, ../sass/screen.scss */
+.slider-wrap {
+  position: relative;
+}
+/* line 250, ../sass/screen.scss */
+.slider-wrap .handle-display-value {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  text-shadow: none;
+  position: absolute;
+  top: -26px;
+  padding: 4px;
+  background: #222;
+  background: rgba(0, 0, 0, 0.5);
+  color: #f2f2f0;
+}
+
+/* line 263, ../sass/screen.scss */
+.timeline-marker {
+  position: absolute;
+  z-index: 99;
+  width: 4px;
+  background: #fff;
+  border: 1px solid #333;
+  height: 14px;
+  top: 0;
+}
+
+/* line 273, ../sass/screen.scss */
+.timeline-controls {
+  margin: 10px 0;
+}
+/* line 275, ../sass/screen.scss */
+.timeline-controls li {
+  display: inline-block;
+  text-align: center;
+  width: 32%;
+  margin: 0;
+  font-size: 1.4em;
 }
