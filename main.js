@@ -12,24 +12,25 @@ require.config({
     }
 })
 
-define(["messenger", "moment", "map", "sightings", "search", "timeline", "typeahead", "jqui"], function(messenger, mom, map, sightings, search, timeline){
-    var map, t;
-    messenger.when("loaded:datum", function() {
-        map = map.getMapInstance(document.getElementById("map-canvas"));
-        sightings.initialize();
-        // t = timeline.initialize({map: map.map, collection: map.getActiveSightings()});
-        // t.render();
-        messenger.when("show:sightings", function() {
-            // t.setCollection(map.getActiveSightings());
+define(["moment", "map", "sightings", "search", "timeline", "typeahead", "jqui"], function(mom, map, sightings, search, timeline){
+    require(["messenger"], function(messenger){
+        sightings.getKey(function() {
+            map.getMapInstance(document.getElementById("map-canvas"));
+            sightings.initialize();
+                // t = timeline.initialize({map: map.map, collection: map.getActiveSightings()});
+                // t.render();
+                // messenger.when("show:sightings", function() {
+                    // t.setCollection(map.getActiveSightings());
+                // })
+        });
+        messenger.when("render:timeline", function() {
+            // t.render();
+        });
+        messenger.when("reset:timeline", function() {
+            // t.reset();
+            // t.render();
+            // t.updateHandles();
         })
-    })
-    messenger.when("render:timeline", function() {
-        // t.render();
-    });
-    messenger.when("reset:timeline", function() {
-        // t.reset();
-        // t.render();
-        // t.updateHandles();
     })
     
 })

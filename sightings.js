@@ -103,17 +103,6 @@ define(["messenger"], function(messenger){
         }
     });
 
-    $.ajax({
-        url: "obfuscation.txt",
-        type: "GET",
-        cache: false,
-        success: function(datum) {
-            Sightings.prototype.url = datum;
-            console.log("yolo");
-            messenger.dispatch("loaded:datum");
-        }
-    })
-
     var SingleBird = Backbone.View.extend({
         tagName: "li",
         template: $("#single-bird-listitem").html(),
@@ -256,7 +245,24 @@ define(["messenger"], function(messenger){
         })
     }
 
+    function getKey(done) {
+        done = done || function(){};
+        $.ajax({
+            url: "obfuscation.txt",
+            type: "GET",
+            cache: false,
+            success: function(datum) {
+                Sightings.prototype.url = datum;
+                messenger.dispatch("loaded:datum");
+                done();
+            }
+        });
+    }
+
     return {
+        getKey: function(done) {
+            getKey(done);
+        },
         getBirds: function() {
             return birds;
         },
