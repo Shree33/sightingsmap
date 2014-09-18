@@ -7,6 +7,7 @@
 @import "compass/css3";
 $orange: #F16031;
 $bluepoi: #5c95e1;
+$greenpoi: #21930d;
 $normalpoi: #F75C54;
 $turquoise: #799b9b;
 $purple: #af99e2;
@@ -148,6 +149,11 @@ ul#active-bird-list {
             &.sienna {
                 border-color: $sienna;
                 color: $sienna; 
+            }
+
+            &.greenpoi {
+                border-color: $greenpoi;
+                color: $greenpoi;
             }
 
             &.bluepoi {

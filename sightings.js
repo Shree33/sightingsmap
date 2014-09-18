@@ -16,11 +16,11 @@ define(["messenger"], function(messenger){
     }
 
     function getNextMarkerUrl() {
-        var markers = [null, "bluepoi", "sienna", "turquoise", "purplepoi"];
+        var markers = [null,"greenpoi", "bluepoi", "sienna", "turquoise", "purplepoi"];
         var i = 0;
 
         return function() {
-            var index = i++ % 5;
+            var index = i++ % markers.length;
             if (index === 0) {
                 return null;
             }
@@ -47,7 +47,7 @@ define(["messenger"], function(messenger){
         initialize: function() {
             var next = getNextMarkerUrl();
             this.on("add", function(bird) {
-                bird.marker_url = next()
+                bird.marker_url = next();
             })
         }
     })
@@ -174,11 +174,11 @@ define(["messenger"], function(messenger){
                 var now = new Date().getTime();
                 this.model.get("sightings").each(function(sighting) {
                     if (sighting.marker) {
-                        var bounce_diff = (now - that.mouseentertime) % 750;
+                        var bounce_diff = (now - that.mouseentertime) % 700;
                         sighting.marker.setZIndex(1);
                         setTimeout(function() {
                             sighting.marker.setAnimation(null)
-                        }, 750 - bounce_diff - 40)
+                        }, 700 - bounce_diff)
                     }
                 })
             },
