@@ -21,7 +21,7 @@ define(["messenger"], function(messenger) {
             this.latLng = new google.maps.LatLng(sighting.get("lat"), sighting.get("lng"));
             this.marker = new google.maps.Marker({
                 position: this.latLng,
-                title: sighting.get("bandnumber") + " sighted here",
+                title: sighting.getBandString() + " sighted here",
                 animation: google.maps.Animation.DROP
             })
         },
@@ -53,36 +53,17 @@ define(["messenger"], function(messenger) {
             that.fitToBounds();
         })
 
-        messenger.when("show:sightings", function(sightings, bird) {
-            that.active_sighting_models.add(sightings.models);
-            sightings.each(function(sighting) {
-                sighting.allsightings = that.active_sighting_models;
-                if (_.isUndefined(sighting.marker)) {
-                    var marker = new Marker({model: sighting, map: that.map});
-                    marker.render();
-                    sighting.marker = marker.marker;
-                    sighting.latLng = marker.latLng;
-                    sighting.marker.setIcon(bird.marker_url);
-                    var infowindow = new google.maps.InfoWindow(
-                      { 
-                        content: sighting.get("date").fromNow(),
-                      });
-                    google.maps.event.addListener(marker.marker, 'click', function() {
-                        if (that.openInfoWindow) {
-                            that.openInfoWindow.close()
-                        }
-                        infowindow.open(that.map, marker.marker);
-                        that.openInfoWindow = infowindow;
-                    });
-                }
-                else {
-                    if (sighting.bird) {
-                        sighting.bird.trigger("bounce");
-                    }
-                }
-            });
-            that.fitToBounds()
+        messenger.when("show:markers add:sightings", function() {
+            that.showMarkers.apply(that,arguments);
         });
+
+        _.bindAll(this, "showMarkers");
+
+        // messenger.when("add:sightings", function(sightings, bird) {
+            // console.log(sightings.at(0));
+            // debugger
+            // that.showMarkers.call(that, sightings, bird);
+        // });
 
         messenger.when("toggle:markers", function(lowerbound, upperbound) {
             that.active_sighting_models.each(function(model) {
@@ -104,12 +85,49 @@ define(["messenger"], function(messenger) {
 
     Map.prototype.fitToBounds = function() {
         var bounds = new google.maps.LatLngBounds();
-        for(i=0;i<this.active_sighting_models.length;i++) {
+        var len = this.active_sighting_models.length;
+        if (len === 0) {
+            this.map.setCenter({lat: 20.7, lng: -156.9601584})
+            this.map.setZoom(8);
+            return this;
+        }
+        for(i=0;i<len;i++) {
          bounds.extend(this.active_sighting_models.at(i).latLng);
         }
         this.map.setCenter(bounds.getCenter());
         this.map.fitBounds(bounds);
         this.map.setZoom(this.map.getZoom() - 1);
+        return this;
+    }
+
+    Map.prototype.showMarkers = function(sightings, parent) {
+        var that = this;
+        that.active_sighting_models.add(sightings.models);
+        sightings.each(function(sighting) {
+            sighting.allsightings = that.active_sighting_models;
+            if (_.isUndefined(sighting.marker)) {
+                var marker = new Marker({model: sighting, map: that.map});
+                marker.render();
+                sighting.marker = marker.marker;
+                sighting.latLng = marker.latLng;
+                sighting.marker.setIcon(parent.marker_url);
+                var infowindow = new google.maps.InfoWindow(
+                  { 
+                    content: "<span class='marker-date'>" + sighting.get("date").format("M/D/YY") + "</span>",
+                  });
+                infowindow.open(that.map, marker.marker);
+                google.maps.event.addListener(marker.marker, 'click', function() {
+                    if (infowindow.getMap() !== null) {
+                        infowindow.close()
+                    }
+                    else {
+                        infowindow.open(that.map, marker.marker);
+                    }
+                    // that.openInfoWindow = infowindow;
+                });
+            }
+        });
+        that.fitToBounds()
     }
 
     return {

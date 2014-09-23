@@ -3,6 +3,7 @@ require.config({
     paths: {
         "sightings": "sightings",
         "search": "search",
+        "router": "router",
         "timeline": "timeline",
         "map": "map",
         "messenger": "messenger",
@@ -12,7 +13,7 @@ require.config({
     }
 })
 
-define(["moment", "map", "sightings", "search", "timeline", "typeahead", "jqui"], function(mom, map, sightings, search, timeline){
+define(["moment", "map", "sightings", "search", "timeline", "router","typeahead", "jqui"], function(mom, map, sightings, search, timeline, router){
     require(["messenger"], function(messenger){
         sightings.getKey(function() {
             map.getMapInstance(document.getElementById("map-canvas"));
@@ -32,5 +33,12 @@ define(["moment", "map", "sightings", "search", "timeline", "typeahead", "jqui"]
             // t.updateHandles();
         })
     })
-    
+
+    $("#launch-help-modal").on("click", function() {
+        $("#help-modal").fadeToggle("fast");
+    });
+
+    $(".js-show-all").on("click", function() {
+        messenger.dispatch("navigate","all", true);
+    });
 })

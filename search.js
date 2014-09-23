@@ -14,36 +14,48 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
         }
     })(window._);
 
-    function parse(sightings) {
+    function parse(birds) {
         var addedPlaces = {};
+        var addedBirds = {};
         var by_band = []
         var by_place = []
 
-        _.each(sightings, function(sighting) {
+        _.each(birds.models, function(bird) {
+            var bandstring = bird.get("bandstring");
+            var bandnumber = bird.get("bandnumber");
+            var sighting = bird.get("sightings").first()
             var tokens = [sighting.get("ul"), sighting.get("ur"), sighting.get("lr"), sighting.get("ll")];
-            var bandstring = sighting.getBandString();
-            var bandnumber = sighting.get("bandnumber");
             var loc = sighting.get("sightinglocation");
+            var className = sighting.getBandsClassName();
+
             by_band.push({
                 tokens: tokens,
                 val: bandstring,
                 type: "bandstring",
                 bandnumber: bandnumber,
-                model: sighting
+                model: sighting,
+                className: className
             });
             by_band.push({
                 tokens: tokens,
                 val: new String(bandnumber),
                 type: 'bandnumber',
                 bandnumber: bandnumber,
-                model: sighting
+                model: sighting,
+                className: className,
             });
             if (_.isUndefined(addedPlaces[loc])) {
+                var loc_id = loc.toLowerCase().replace(" ", "");
+                var locsightings = bird_data.getByLocation()[loc_id];
                 addedPlaces[loc] = true;
                 by_place.push({
                     tokens: [loc],
                     val: loc,
-                    type: "location"
+                    type: 'location',
+                    loc_id: loc_id,
+                    model: sighting,
+                    sightings: locsightings,
+                    sightingslength: locsightings.length
                 })
             }
         })
@@ -52,8 +64,8 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
             by_place: by_place
         }
     }
-    messenger.when("loaded:sightings", function(sightings) {
-        var tokens = parse(sightings);
+    messenger.when("loaded:sightings", function(birds) {
+        var tokens = parse(birds);
         var band_engine = new Bloodhound({
             local: tokens.by_band,
             datumTokenizer: function(d) {
@@ -73,8 +85,6 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
             limit: 10
         });
         place_engine.initialize()
-
-
 
         $searchbar.typeahead(
             {
@@ -96,18 +106,20 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
                 source: place_engine.ttAdapter(),
                 templates: {
                     empty: "<div class='tt-empty-results'>No results found.</div>",
-                    suggestion: _.compile($("#suggestion-template").html()),
+                    suggestion: _.compile($("#suggestion-location-template").html()),
                     header: "<h2>By Location</h2>"
             },
         }).on("typeahead:selected", function(e, suggestion) {
-            var bird = bird_data.getBirds()._byId[suggestion.bandnumber]
             switch(suggestion.type) {
                 case "bandnumber": 
                 case "bandstring":
-                    console.log(bird);
+                    var bird = bird_data.getBirds()._byId[suggestion.bandnumber]
                     if (bird) {
-                        messenger.dispatch("show:sightings", bird.get("sightings"), bird);
+                        messenger.dispatch("add:sightings", bird.get("sightings"), bird);
                     }
+                break;
+                case "location":
+                    messenger.dispatch("show:location", suggestion.val, suggestion.sightings);
                 break;
             }
             $searchbar.typeahead("val", "")

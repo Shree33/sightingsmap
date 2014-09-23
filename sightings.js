@@ -15,8 +15,10 @@ define(["messenger"], function(messenger){
         "JCNWR": "James Campebell National Wildlife Refuge"
     }
 
+    var by_location = {};
+
     function getNextMarkerUrl() {
-        var markers = [null,"greenpoi", "bluepoi", "sienna", "turquoise", "purplepoi"];
+        var markers = [null,"greenpoi", "orange", "bluepoi", "sienna", "turquoise", "purplepoi"];
         var i = 0;
 
         return function() {
@@ -43,7 +45,14 @@ define(["messenger"], function(messenger){
         }
     })
     var Birds = Backbone.Collection.extend({
-        model: Bird,
+        model: function(m) {
+            if (m instanceof Bird) {
+                return Bird
+            }
+            else {
+                return Location;
+            }
+        },
         initialize: function() {
             var next = getNextMarkerUrl();
             this.on("add", function(bird) {
@@ -72,6 +81,13 @@ define(["messenger"], function(messenger){
                 lng: lng + dir*Math.random()/1000
             });
             bird.addSighting(this);
+            var loc = by_location[this.get("sightinglocation").toLowerCase().replace(" ", "")]
+            if (typeof loc === "undefined") {
+                by_location[this.get("sightinglocation").toLowerCase().replace(" ", "")] = new Sightings([this]);
+            }
+            else {
+                by_location[this.get("sightinglocation").toLowerCase().replace(" ", "")].add(this);
+            }
         },
         parse: function(r) {
             var p = "gsx$";
@@ -87,7 +103,7 @@ define(["messenger"], function(messenger){
             var bandnum = sanitized["bandnumber"]
             var date = moment(sanitized["date"])
 
-            return  _.omit(_.extend(parseNums(sanitized), {date: date, bird_id: bandnum}), function(value, key) {
+            return  _.omit(_.extend(parseNums(sanitized), {date: date, bird_id: parseInt(bandnum)}), function(value, key) {
                 key.indexOf(p) !== -1;
             });
         },
@@ -96,10 +112,14 @@ define(["messenger"], function(messenger){
             var ll = this.get("ll") || "X";
             var ur = this.get("ur") || "X";
             var lr = this.get("lr") || "X";
-            return ul + ll + ur + lr;
+            return ul + ll + ":" + ur + lr;
         },
         hasLocation: function() {
             return !_.isUndefined(this.get("lat")) && !_.isUndefined(this.get("lng"));
+        },
+        getBandsClassName: function(){
+            var json = this.toJSON();
+            return "ul-" + json.ul + " ur-" + json.ur + " ll-" + json.ll + " lr-" + json.lr;
         }
     });
 
@@ -109,6 +129,8 @@ define(["messenger"], function(messenger){
             return response.feed.entry
         }
     });
+
+
 
     var SingleBird = Backbone.View.extend({
         tagName: "li",
@@ -177,7 +199,9 @@ define(["messenger"], function(messenger){
                         var bounce_diff = (now - that.mouseentertime) % 700;
                         sighting.marker.setZIndex(1);
                         setTimeout(function() {
-                            sighting.marker.setAnimation(null)
+                            if (sighting.marker) {
+                                sighting.marker.setAnimation(null)
+                            }
                         }, 700 - bounce_diff)
                     }
                 })
@@ -205,28 +229,43 @@ define(["messenger"], function(messenger){
                 e.stopPropagation();
             }
         }
-    })
+    });
+
+    var Location = Backbone.Model.extend({
+        idAttribute: 'val'
+    });
+
+    var SingleLocation = SingleBird.extend({
+        template: "<%= val %> (<span class='num-sightings'><%= numsightings %></span>) <i class='js-remove-loc icon-close'></i>",
+        initialize: function() {
+            SingleBird.prototype.initialize.apply(this, arguments);
+            this.events = _.extend(this.events, { 
+                "click .js-remove-loc": function(){
+                    this.model.collection.remove(this.model.cid);
+                },
+                "click": function() {
+                    console.log(this.model)
+                }
+            })
+            this.delegateEvents();
+        }
+    });
 
     var BirdList = Backbone.View.extend({
         el: "#active-bird-list",
         initialize: function() {
             var that = this;
-            this.listenTo(messenger, "show:sightings", function(sightings) {
-                sightings.each(function(sighting) {
-                    var bird = sighting.bird;
-                    if (bird) {
-                        bird.birdlist_collection = that.collection
-                        that.collection.add(bird);    
-                    }
-                    
-                })
-            })
             this.listenTo(this.collection, {
                 "add": this.addBird
             })
         },
         addBird: function(bird) {
-            this.$el.append(new SingleBird({model: bird}).render().el)
+            if (bird instanceof Bird){
+                this.$el.append(new SingleBird({model: bird}).render().el)
+            }
+            else {
+                this.$el.append(new SingleLocation({model: bird}).render().el)   
+            }
             return this;
         },
         render: function() {
@@ -239,14 +278,32 @@ define(["messenger"], function(messenger){
 
     var birds = new Birds()
     var sightings = new Sightings()
-    new BirdList({collection: new Birds()});
+    var ActiveBirdList = new BirdList({collection: new Birds()});
+    ActiveBirdList.listenTo(messenger, "add:sightings", function(sightings, bird, opts) {
+        opts = _.extend({}, opts);
+        sightings.each(function(sighting) {
+            var bird = sighting.bird;
+            if (bird) {
+                bird.birdlist_collection = ActiveBirdList.collection
+                ActiveBirdList.collection.add(bird, opts);    
+            }
+            
+        })
+    });
+    ActiveBirdList.listenTo(messenger, "show:location", function(location, sightings) {
+        location = new Location({val: location});
+        location.set("numsightings", sightings.length);
+        location.set("sightings", sightings);
+        this.collection.add(location, {from_route: true, location: true});
+        messenger.dispatch("show:markers", sightings, location);
+    })
     function initialize() {
         sightings.fetch({
             parse: true,
             cache: false,
             sort: false
         }).success(function() {
-            messenger.dispatch("loaded:sightings", sightings.models)
+            messenger.dispatch("loaded:sightings", birds)
         }).fail(function() {
             console.log(arguments)
         })
@@ -278,6 +335,12 @@ define(["messenger"], function(messenger){
         },
         initialize: function() {
             return initialize();
+        },
+        getActiveBirds: function() {
+            return ActiveBirdList.collection;
+        },
+        getByLocation: function() {
+            return by_location;
         }
     }
 })

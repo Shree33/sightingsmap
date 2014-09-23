@@ -10,6 +10,9 @@
     <body> 
         <div id='map-canvas-wrapper'>
             <input type='text' placeholder='Search for birds and locations' id='searchbar'/>
+            <div id='quick-controls'>
+                <span class='js-show-all'>Show All Sightings</span>
+            </div>
             <div id='map-canvas'></div>
             <ul id='active-bird-list'></ul>
             <footer>
@@ -22,6 +25,10 @@
                 <li class='js-fast-forward icon-forward js-speed-control' dir='forward' speed='1x' data-tooltip='Fast Forward Timeline'></li>
               </ul>
             </footer>
+            <button id='launch-help-modal'><i class='icon-question'></i></button>
+            <p id='help-modal'>Each letter corresponds to the birds' band color in the following order: Upper Left, Lower Left, Upper Right, Lower Right.
+            For example, WWOA would correspond to White(upper left), White(lower left), Orange(upper right), Aluminum (lower right).</p>
+             
         </div>
 
         <script type="text/javascript"
@@ -30,8 +37,18 @@
         <script src='//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js', type='text/javascript'></script>
         <script src='//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js', type='text/javascript'></script>
         <script type='text/javascript' src='lib/require.js' data-main='main.js'></script>
+        <script type="text/template" id='suggestion-location-template'>
+            <span class='sightings-length'>(<%= sightingslength %>)</span>
+            <%= val %>  
+        </script>
         <script type="text/template" id='suggestion-template'>
-            <%= val %>
+            <div class='band-cube-wrapper'>
+                <%= val %>
+                <div class='band-block ul <%= model.get("ul") %>'></div>
+                <div class='band-block ur <%= model.get("ur") %>'></div>
+                <div class='band-block ll <%= model.get("ll") %>'></div>
+                <div class='band-block lr <%= model.get("lr") %>'></div>
+            </div>
         </script>
         <script type="text/template" id='single-bird-listitem'>
             <%= bandstring %> (<%= bandnumber %>) 
