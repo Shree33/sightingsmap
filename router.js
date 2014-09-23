@@ -61,6 +61,7 @@ define(["messenger", "sightings"], function(messenger, sightings) {
                 var bird = that.all_birds._byId[id];
                 if (bird){
                     messenger.dispatch("add:sightings", bird.get("sightings"), bird);
+                    messenger.dispatch("add:filter", bird.get("bandnumber"));
                 }
                 else {
                     var str = id.toLowerCase().replace(" ", "");

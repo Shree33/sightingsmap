@@ -213,7 +213,7 @@ define(["messenger"], function(messenger){
                 this.toggleBirdInfo()
             },
             "click .js-remove-bird": function(e) {
-                messenger.dispatch("remove:filter", this.model.get("bandstring"));
+                messenger.dispatch("remove:filter", this.model.get("bandnumber"));
                 this.model.birdlist_collection.remove(this.model.cid);
                 var that = this;
                 this.model.get("sightings").each(function(sighting) {

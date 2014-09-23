@@ -126,6 +126,9 @@ define(["messenger"], function(messenger) {
                     // that.openInfoWindow = infowindow;
                 });
             }
+            else {
+                sighting.trigger("bounce");
+            }
         });
         that.fitToBounds()
     }

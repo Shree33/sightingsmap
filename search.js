@@ -16,9 +16,9 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
 
     var selected = {};
 
-    function filter(suggestions) {
+    function filter(suggestions, id) {
         return $.grep(suggestions, function(suggestion) {
-            return _.isUndefined(selected[suggestion.val]) === true;
+            return _.isUndefined(selected[suggestion[id]]) === true;
         });
     }
 
@@ -104,7 +104,7 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
                 displayKey: "val",
                 source: function(query, cb) {
                     band_engine.get(query, function(suggestions) {
-                        cb(filter(suggestions));
+                        cb(filter(suggestions, "bandnumber"));
                     });
                 },
                 templates: {
@@ -117,7 +117,7 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
                 displayKey: "val",
                 source: function(query, cb) {
                     place_engine.get(query, function(suggestions) {
-                        cb(filter(suggestions));
+                        cb(filter(suggestions, "val"));
                     });
                 },
                 templates: {
@@ -131,7 +131,7 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
                 case "bandstring":
                     var bird = bird_data.getBirds()._byId[suggestion.bandnumber]
                     if (bird) {
-                        selected[suggestion.val] = true;
+                        selected[suggestion.bandnumber] = true;
                         messenger.dispatch("add:sightings", bird.get("sightings"), bird);
                     }
                 break;
@@ -142,6 +142,11 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
             }
             $searchbar.typeahead("val", "")
         });
+
+        messenger.when("add:filter", function(id) {
+            console.log(id);
+            selected[id] = true;
+        })
 
         messenger.when("remove:filter", function(id) {
             selected[id] = void 0;
