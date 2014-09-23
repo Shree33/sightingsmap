@@ -158,6 +158,10 @@ ul#active-bird-list {
         &.color {
             border-bottom-width: 3px;
 
+            i {
+                color: inherit !important;
+            }
+
             &.null {
                 border-color: $normalpoi;
                 color: $normalpoi; 

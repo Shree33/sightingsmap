@@ -189,6 +189,9 @@ define(["messenger"], function(messenger){
                         sighting.marker.setZIndex(9);
                         sighting.marker.setAnimation(google.maps.Animation.BOUNCE)
                     }
+                    if (sighting.mouseleavetimeout) {
+                        clearTimeout(sighting.mouseleavetimeout);
+                    }
                 })
             },
             "mouseleave": function() {
@@ -198,7 +201,7 @@ define(["messenger"], function(messenger){
                     if (sighting.marker) {
                         var bounce_diff = (now - that.mouseentertime) % 700;
                         sighting.marker.setZIndex(1);
-                        setTimeout(function() {
+                        sighting.mouseleavetimeout = setTimeout(function() {
                             if (sighting.marker) {
                                 sighting.marker.setAnimation(null)
                             }
