@@ -210,6 +210,7 @@ define(["messenger"], function(messenger){
                 this.toggleBirdInfo()
             },
             "click .js-remove-bird": function(e) {
+                messenger.dispatch("remove:filter", this.model.get("bandstring"));
                 this.model.birdlist_collection.remove(this.model.cid);
                 var that = this;
                 this.model.get("sightings").each(function(sighting) {
@@ -241,6 +242,7 @@ define(["messenger"], function(messenger){
             SingleBird.prototype.initialize.apply(this, arguments);
             this.events = _.extend(this.events, { 
                 "click .js-remove-loc": function(){
+                    messenger.dispatch("remove:filter", this.model.get("val"));
                     this.model.collection.remove(this.model.cid);
                 },
                 "click": function() {

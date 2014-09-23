@@ -14,6 +14,14 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
         }
     })(window._);
 
+    var selected = {};
+
+    function filter(suggestions) {
+        return $.grep(suggestions, function(suggestion) {
+            return _.isUndefined(selected[suggestion.val]) === true;
+        });
+    }
+
     function parse(birds) {
         var addedPlaces = {};
         var addedBirds = {};
@@ -94,7 +102,11 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
             }, 
             {
                 displayKey: "val",
-                source: band_engine.ttAdapter(),
+                source: function(query, cb) {
+                    band_engine.get(query, function(suggestions) {
+                        cb(filter(suggestions));
+                    });
+                },
                 templates: {
                     empty: "<div class='tt-empty-results'>No results found.</div>",
                     suggestion: _.compile($("#suggestion-template").html()),
@@ -103,7 +115,11 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
             },
             {
                 displayKey: "val",
-                source: place_engine.ttAdapter(),
+                source: function(query, cb) {
+                    place_engine.get(query, function(suggestions) {
+                        cb(filter(suggestions));
+                    });
+                },
                 templates: {
                     empty: "<div class='tt-empty-results'>No results found.</div>",
                     suggestion: _.compile($("#suggestion-location-template").html()),
@@ -115,14 +131,20 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
                 case "bandstring":
                     var bird = bird_data.getBirds()._byId[suggestion.bandnumber]
                     if (bird) {
+                        selected[suggestion.val] = true;
                         messenger.dispatch("add:sightings", bird.get("sightings"), bird);
                     }
                 break;
                 case "location":
+                    selected[suggestion.val] = true;
                     messenger.dispatch("show:location", suggestion.val, suggestion.sightings);
                 break;
             }
             $searchbar.typeahead("val", "")
+        });
+
+        messenger.when("remove:filter", function(id) {
+            selected[id] = void 0;
         })
     })
 })
