@@ -92,7 +92,7 @@ define(["messenger"], function(messenger){
         parse: function(r) {
             var p = "gsx$";
             // Get only relevant properties
-            var sanitized = _.pick(r, p+"lat", p+"lng", p+"ll", p+"lr", p+"ul", p + "bandcolor", p+"ur", p+"sightinglocation", p+"date", p+"bandnumber")
+            var sanitized = _.pick(r, p+"lat", p+"lng", p + "bandcolor", p+"sightinglocation", p+"date", p+"bandnumber")
             // Parse location shortcuts
             _.each(sanitized, function(val, key) {
                 sanitized[key.replace(p, "")] = val.$t;
