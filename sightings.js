@@ -113,14 +113,14 @@ define(["messenger"], function(messenger){
             var ur = this.get("ur") || "X";
             var lr = this.get("lr") || "X";
 	    var bandcolor = this.get("bandcolor") || "X";
-            return "Band Color:" + bandcolor;
+            return "Band Color: " + bandcolor;
         },
         hasLocation: function() {
             return !_.isUndefined(this.get("lat")) && !_.isUndefined(this.get("lng"));
         },
         getBandsClassName: function(){
             var json = this.toJSON();
-            return "ul-" + json.ul + " ur-" + json.ur + " ll-" + json.ll + " lr-" + json.lr + "bandcolor-" + json.bandcolor;
+            return "bandcolor-" + json.bandcolor;
         }
     });
 
