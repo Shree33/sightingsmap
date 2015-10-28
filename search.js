@@ -31,8 +31,8 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
         _.each(birds.models, function(bird) {
             var bandstring = bird.get("bandstring");
             var bandnumber = bird.get("bandnumber");
-            var sighting = bird.get("sightings").first()
-            var tokens = [sighting.get("ul"), sighting.get("ur"), sighting.get("lr"), sighting.get("ll")];
+            var sighting = bird.get("sightings").first();
+            var tokens = [sighting.get("bandcolor")];
             var loc = sighting.get("sightinglocation");
             var className = sighting.getBandsClassName();
 
