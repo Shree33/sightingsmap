@@ -32,12 +32,12 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
             var bandstring = bird.get("bandstring");
             var bandnumber = bird.get("bandnumber");
             var sighting = bird.get("sightings").first()
-            var tokens = [sighting.get("ul"), sighting.get("ur"), sighting.get("lr"), sighting.get("ll")];
+            var tokens = sighting.get("bandcolor");
             var loc = sighting.get("sightinglocation");
             var className = sighting.getBandsClassName();
 
             by_band.push({
-                tokens: tokens,
+                tokens: [tokens],
                 val: bandstring,
                 type: "bandstring",
                 bandnumber: bandnumber,
@@ -45,7 +45,7 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
                 className: className
             });
             by_band.push({
-                tokens: tokens,
+                tokens: [tokens],
                 val: new String(bandnumber),
                 type: 'bandnumber',
                 bandnumber: bandnumber,

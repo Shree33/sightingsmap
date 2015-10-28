@@ -92,7 +92,7 @@ define(["messenger"], function(messenger){
         parse: function(r) {
             var p = "gsx$";
             // Get only relevant properties
-            var sanitized = _.pick(r, p+"lat", p+"lng", p+"ll", p+"lr", p+"ul", p+"ur", p+"sightinglocation", p+"date", p+"bandnumber")
+            var sanitized = _.pick(r, p+"lat", p+"lng", p+"bandcolor", p+"sightinglocation", p+"date", p+"bandnumber")
             // Parse location shortcuts
             _.each(sanitized, function(val, key) {
                 sanitized[key.replace(p, "")] = val.$t;
@@ -108,18 +108,15 @@ define(["messenger"], function(messenger){
             });
         },
         getBandString: function() {
-            var ul = this.get("ul") || "X";
-            var ll = this.get("ll") || "X";
-            var ur = this.get("ur") || "X";
-            var lr = this.get("lr") || "X";
-            return ul + ll + ":" + ur + lr;
+            var bandcolor = this.get("bandcolor") || "X";
+            return "Band color:" + bandcolor;
         },
         hasLocation: function() {
             return !_.isUndefined(this.get("lat")) && !_.isUndefined(this.get("lng"));
         },
         getBandsClassName: function(){
             var json = this.toJSON();
-            return "ul-" + json.ul + " ur-" + json.ur + " ll-" + json.ll + " lr-" + json.lr;
+            return "bandcolor-" + bandcolor;
         }
     });
 
