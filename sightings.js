@@ -108,10 +108,6 @@ define(["messenger"], function(messenger){
             });
         },
         getBandString: function() {
-            var ul = this.get("ul") || "X";
-            var ll = this.get("ll") || "X";
-            var ur = this.get("ur") || "X";
-            var lr = this.get("lr") || "X";
 	    var bandcolor = this.get("bandcolor") || "X";
             return "Band Color: " + bandcolor;
         },
