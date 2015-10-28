@@ -35,7 +35,7 @@ define(["messenger"], function(messenger) {
 
     function Map(el) {
         this.map = new google.maps.Map(el, {
-            center: {lat: 20.7, lng: -156.9601584},
+            center: {lat: 43.08087, lng: -70.76028},
             zoom: 8
         });    
 
@@ -87,7 +87,7 @@ define(["messenger"], function(messenger) {
         var bounds = new google.maps.LatLngBounds();
         var len = this.active_sighting_models.length;
         if (len === 0) {
-            this.map.setCenter({lat: 20.7, lng: -156.9601584})
+            this.map.setCenter({lat: 43.08087, lng: -70.76028})
             this.map.setZoom(8);
             return this;
         }
