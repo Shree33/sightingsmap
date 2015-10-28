@@ -119,7 +119,7 @@ define(["messenger"], function(messenger){
         },
         getBandsClassName: function(){
             var json = this.toJSON();
-            return "ul-" + json.ul + " ur-" + json.ur + " ll-" + json.ll + " lr-" + json.lr;
+            return "ul-" + json.ul + " ur-" + json.ur + " ll-" + json.ll + " lr-" + json.lr + "bandcolor-" + json.bandcolor;
         }
     });
 
