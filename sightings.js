@@ -112,7 +112,8 @@ define(["messenger"], function(messenger){
             var ll = this.get("ll") || "X";
             var ur = this.get("ur") || "X";
             var lr = this.get("lr") || "X";
-            return ul + ll + ":" + ur + lr;
+	    var bandcolor = this.get("bandcolor") || "X";
+            return "Band Color:" + bandcolor;
         },
         hasLocation: function() {
             return !_.isUndefined(this.get("lat")) && !_.isUndefined(this.get("lng"));
