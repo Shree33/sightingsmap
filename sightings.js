@@ -317,7 +317,7 @@ define(["messenger"], function(messenger){
     function getKey(done) {
         done = done || function(){};
         $.ajax({
-            url: "obfuscation.txt",
+            url: "https://spreadsheets.google.com/feeds/list/1AL2iUWo1gpAvjCLgNn4qhR47dx2WHLT5S8JJqDwkq7Q/1/public/values?alt=json",
             type: "GET",
             cache: false,
             success: function(datum) {
