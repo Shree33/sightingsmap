@@ -101,6 +101,7 @@ define(["messenger"], function(messenger){
                 }
             });
             var bandnum = sanitized["bandnumber"]
+		console.log(bandnum);
             var date = moment(sanitized["date"])
 
             return  _.omit(_.extend(parseNums(sanitized), {date: date, bird_id: parseInt(bandnum)}), function(value, key) {
