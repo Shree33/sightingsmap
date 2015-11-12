@@ -13,8 +13,8 @@ define(["messenger"], function(messenger) {
                 },
                 "hide": function() {
                     if (this.isShowing()) {
-                        this.marker.setMap(null);
-                        this.showing = false;
+//                        this.marker.setMap(null);
+//                        this.showing = false;
                     }
                 } 
             });
