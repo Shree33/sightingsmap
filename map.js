@@ -110,17 +110,7 @@ define(["messenger"], function(messenger) {
                 var marker = new Marker({model: sighting, map: that.map});
                 marker.render();
                 sighting.marker = marker.marker;
-                //sighting.latLng = marker.latLng;
-                sighting.marker.setIcon(parent.marker_url);
-                var infowindow = new google.maps.InfoWindow(
-                  { 
-                    content: "<span class='marker-date'>" + sighting.get("date").format("M/D/YY") + "</span>",
-                  });
-                infowindow.open(that.map, marker.marker);
-                google.maps.event.addListener(marker.marker, 'click', function() {
-                    if (infowindow.getMap() !== null) {
-                        infowindow.close()
-                    }
+                sighting.latLng = marker.latLng;
                     else {
                         infowindow.open(that.map, marker.marker);
                     }
