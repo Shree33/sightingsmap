@@ -104,7 +104,7 @@ define(["messenger"], function(messenger){
 		console.log(bandnum);
             var date = moment(sanitized["date"])
 
-	    return  _.omit(_.extend(parseNums(sanitized), {date: date, bird_id: bandnum}), function(value, key) {
+	    return  _.omit(_.extend(sanitized, {date: date, bird_id: parseInt(bandnum)}), function(value, key) {
                 key.indexOf(p) !== -1;
             });
         },
