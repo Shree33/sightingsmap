@@ -57,7 +57,7 @@ define(["messenger"], function(messenger) {
             that.showMarkers.apply(that,arguments);
         });
 
-//        _.bindAll(this, "showMarkers");
+        _.bindAll(this, "showMarkers");
 
         // messenger.when("add:sightings", function(sightings, bird) {
             // console.log(sightings.at(0));
