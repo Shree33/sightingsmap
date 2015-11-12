@@ -18,9 +18,8 @@ define(["messenger"], function(messenger) {
                     }
                 } 
             });
-            console.log("Got here!");
+
             this.latLng = new google.maps.LatLng(sighting.get("lat"), sighting.get("lng"));
-            console.log("Got here!");
 	    this.marker = new google.maps.Marker({
                 position: this.latLng,
                 title: sighting.getBandString() + " sighted here",
@@ -111,7 +110,7 @@ define(["messenger"], function(messenger) {
                 var marker = new Marker({model: sighting, map: that.map});
                 marker.render();
                 sighting.marker = marker.marker;
-                sighting.latLng = marker.latLng;
+                //sighting.latLng = marker.latLng;
                 sighting.marker.setIcon(parent.marker_url);
                 var infowindow = new google.maps.InfoWindow(
                   { 
