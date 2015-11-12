@@ -103,8 +103,10 @@ define(["messenger"], function(messenger){
             var bandnum = sanitized["bandnumber"]
 		console.log(bandnum);
             var date = moment(sanitized["date"])
+	var lat = parseInt(sanitized["lat"]);
+	var lng = parseInt(sanitized["lng"]);
 
-	    return  _.omit(_.extend(sanitized, {date: date, bird_id: bandnum}), function(value, key) {
+	    return  _.omit(_.extend(sanitized, {date: date, bird_id: bandnum, lat: lat, lng: lng}), function(value, key) {
                 key.indexOf(p) !== -1;
             });
         },
