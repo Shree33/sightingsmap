@@ -51,7 +51,7 @@ define(["messenger"], function(messenger) {
             else { 
                 messenger.dispatch("reset:timeline")
             }
-            //that.fitToBounds();
+            that.fitToBounds();
         })
 
         messenger.when("show:markers add:sightings", function() {
@@ -97,7 +97,7 @@ define(["messenger"], function(messenger) {
         }
         this.map.setCenter(bounds.getCenter());
         this.map.fitBounds(bounds);
-        this.map.setZoom(this.map.getZoom() - 1);
+        //this.map.setZoom(this.map.getZoom() - 1);
         return this;
     }
 
