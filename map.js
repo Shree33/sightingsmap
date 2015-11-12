@@ -50,7 +50,7 @@ define(["messenger"], function(messenger) {
             else { 
                 messenger.dispatch("reset:timeline")
             }
-            that.fitToBounds();
+            //that.fitToBounds();
         })
 
         messenger.when("show:markers add:sightings", function() {
