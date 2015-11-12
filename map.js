@@ -13,17 +13,17 @@ define(["messenger"], function(messenger) {
                 },
                 "hide": function() {
                     if (this.isShowing()) {
-//                        this.marker.setMap(null);
-//                        this.showing = false;
+                        this.marker.setMap(null);
+                        this.showing = false;
                     }
                 } 
             });
-            this.latLng = new google.maps.LatLng(sighting.get("lat"), sighting.get("lng"));
-            this.marker = new google.maps.Marker({
-                position: this.latLng,
-                title: sighting.getBandString() + " sighted here",
-                animation: google.maps.Animation.DROP
-            })
+            //this.latLng = new google.maps.LatLng(sighting.get("lat"), sighting.get("lng"));
+            //this.marker = new google.maps.Marker({
+              //  position: this.latLng,
+                //title: sighting.getBandString() + " sighted here",
+                //animation: google.maps.Animation.DROP
+            //})
         },
         render: function() {
             this.marker.setMap(this.map);
