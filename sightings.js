@@ -282,17 +282,17 @@ define(["messenger"], function(messenger){
     var birds = new Birds()
     var sightings = new Sightings()
     var ActiveBirdList = new BirdList({collection: new Birds()});
- //   ActiveBirdList.listenTo(messenger, "add:sightings", function(sightings, bird, opts) {
-   //     opts = _.extend({}, opts);
- //       sightings.each(function(sighting) {
-//            var bird = sighting.bird;
-    //        if (bird) {
-  //              bird.birdlist_collection = ActiveBirdList.collection
-//                ActiveBirdList.collection.add(bird, opts);    
-      //      }
-    //        
-  //      })
-//    });
+    ActiveBirdList.listenTo(messenger, "add:sightings", function(sightings, bird, opts) {
+        opts = _.extend({}, opts);
+        sightings.each(function(sighting) {
+            var bird = sighting.bird;
+            if (bird) {
+                bird.birdlist_collection = ActiveBirdList.collection
+                ActiveBirdList.collection.add(bird, opts);    
+            }
+            
+        })
+    });
     ActiveBirdList.listenTo(messenger, "show:location", function(location, sightings) {
         location = new Location({val: location});
         location.set("numsightings", sightings.length);
