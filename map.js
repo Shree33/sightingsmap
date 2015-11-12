@@ -131,7 +131,7 @@ define(["messenger"], function(messenger) {
                 sighting.trigger("bounce");
             }
         });
-        //that.fitToBounds()
+        that.fitToBounds()
     }
 
     return {
