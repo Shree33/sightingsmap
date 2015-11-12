@@ -113,8 +113,6 @@ define(["messenger"], function(messenger) {
                 sighting.latLng = marker.latLng;
                 sighting.marker.setIcon(parent.marker_url);
 
-                    // that.openInfoWindow = infowindow;
-                });
             }
             else {
                 sighting.trigger("bounce");
