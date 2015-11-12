@@ -111,9 +111,8 @@ define(["messenger"], function(messenger) {
                 marker.render();
                 sighting.marker = marker.marker;
                 sighting.latLng = marker.latLng;
-                    else {
-                        infowindow.open(that.map, marker.marker);
-                    }
+                sighting.marker.setIcon(parent.marker_url);
+
                     // that.openInfoWindow = infowindow;
                 });
             }
