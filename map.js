@@ -105,7 +105,13 @@ define(["messenger"], function(messenger) {
         that.active_sighting_models.add(sightings.models);
         sightings.each(function(sighting) {
             sighting.allsightings = that.active_sighting_models;
-
+            if (_.isUndefined(sighting.marker)) {
+                var marker = new Marker({model: sighting, map: that.map});
+                
+            }
+            else {
+                sighting.trigger("bounce");
+            }
         });
         that.fitToBounds()
     }
