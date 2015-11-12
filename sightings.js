@@ -110,7 +110,7 @@ define(["messenger"], function(messenger){
         },
         getBandString: function() {
 	    var bandcolor = this.get("bandcolor") || "X";
-            return "Band Color: " + bandcolor;
+            return bandcolor;
         },
         hasLocation: function() {
             return !_.isUndefined(this.get("lat")) && !_.isUndefined(this.get("lng"));
