@@ -18,8 +18,10 @@ define(["messenger"], function(messenger) {
                     }
                 } 
             });
+            console.log("Got here!");
             this.latLng = new google.maps.LatLng(sighting.get("lat"), sighting.get("lng"));
-            this.marker = new google.maps.Marker({
+            console.log("Got here!");
+	    this.marker = new google.maps.Marker({
                 position: this.latLng,
                 title: sighting.getBandString() + " sighted here",
                 animation: google.maps.Animation.DROP
