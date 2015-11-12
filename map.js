@@ -107,7 +107,7 @@ define(["messenger"], function(messenger) {
             sighting.allsightings = that.active_sighting_models;
             if (_.isUndefined(sighting.marker)) {
                 var marker = new Marker({model: sighting, map: that.map});
-                marker.render();
+                //marker.render();
                 sighting.marker = marker.marker;
                 sighting.latLng = marker.latLng;
                 sighting.marker.setIcon(parent.marker_url);
