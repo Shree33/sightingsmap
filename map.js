@@ -125,7 +125,7 @@ console.log(bounds);
                     else {
                         infowindow.open(that.map, marker.marker);
                     }
-                    // that.openInfoWindow = infowindow;
+                    that.openInfoWindow = infowindow;
                 });
             }
             else {
