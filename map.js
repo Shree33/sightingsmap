@@ -53,9 +53,9 @@ define(["messenger"], function(messenger) {
             that.fitToBounds();
         })
 
-        messenger.when("show:markers add:sightings", function() {
-            that.showMarkers.apply(that,arguments);
-        });
+ //       messenger.when("show:markers add:sightings", function() {
+//            that.showMarkers.apply(that,arguments);
+//        });
 
         _.bindAll(this, "showMarkers");
 
