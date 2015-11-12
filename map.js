@@ -101,17 +101,7 @@ define(["messenger"], function(messenger) {
     }
 
     Map.prototype.showMarkers = function(sightings, parent) {
-        var that = this;
-        that.active_sighting_models.add(sightings.models);
-        sightings.each(function(sighting) {
-            sighting.allsightings = that.active_sighting_models;
-            if (_.isUndefined(sighting.marker)) {
-            }
-            else {
-                sighting.trigger("bounce");
-            }
-        });
-        that.fitToBounds()
+
     }
 
     return {
