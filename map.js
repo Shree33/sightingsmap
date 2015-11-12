@@ -101,7 +101,10 @@ define(["messenger"], function(messenger) {
     }
 
     Map.prototype.showMarkers = function(sightings, parent) {
+        var that = this;
+        that.active_sighting_models.add(sightings.models);
 
+        that.fitToBounds()
     }
 
     return {
