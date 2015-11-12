@@ -115,6 +115,7 @@ console.log(bounds);
                 sighting.marker.setIcon(parent.marker_url);
                 var infowindow = new google.maps.InfoWindow(
                   { 
+                  	console.log(sighting.get("date").format("M/D/YY"));
                     content: "<span class='marker-date'>" + sighting.get("date").format("M/D/YY") + "</span>",
                   });
                 infowindow.open(that.map, marker.marker);
