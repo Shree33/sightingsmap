@@ -46,8 +46,8 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
             });
             by_band.push({
                 tokens: tokens,
-                val: new String(bandnumber),
-                type: 'bandnum',
+                val: bandnumber,
+                type: 'bandnumber',
                 bandnumber: bandnumber,
                 model: sighting,
                 className: className,
