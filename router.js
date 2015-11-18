@@ -2,7 +2,6 @@ define(["messenger", "sightings"], function(messenger, sightings) {
     var Router = Backbone.Router.extend({
         initialize: function() {
             this.all_birds = sightings.getBirds();
-            console.log(sightings);
             var active_birds = sightings.getActiveBirds();
             this.active_birds = active_birds;
 

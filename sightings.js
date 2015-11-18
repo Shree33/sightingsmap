@@ -101,7 +101,6 @@ define(["messenger"], function(messenger){
                 }
             });
             var bandnum = sanitized["bandnumber"]
-		console.log(bandnum);
             var date = moment(sanitized["date"])
 	var lat = parseInt(sanitized["lat"]);
 	var lng = parseInt(sanitized["lng"]);
