@@ -615,3 +615,12 @@ footer {
   width: 2em;
   text-align: center;
 }
+
+/* line 499, ../sass/screen.scss */
+.marker-date {
+  display: block;
+  width: 48px;
+  text-align: center;
+  height: 17px;
+  line-height: 19px;
+}
