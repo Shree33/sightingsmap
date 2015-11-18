@@ -125,7 +125,7 @@ define(["messenger"], function(messenger) {
                     else {
                         infowindow.open(that.map, marker.marker);
                     }
-                    that.openInfoWindow = infowindow;
+                    //that.openInfoWindow = infowindow;
                 });
             }
             else {
