@@ -114,7 +114,7 @@ define(["messenger"], function(messenger) {
                 sighting.marker.setIcon(parent.marker_url);
                 var infowindow = new google.maps.InfoWindow(
                   { 
-                    content: "<span class='marker-date'>" + sighting.get("date").format("M/D/YY") + "</span>",
+                    content: sighting.get("date").format("M/D/YY"),
                   });
 		console.log(sighting.get("date").format("M/D/YY"));
                 infowindow.open(that.map, marker.marker);
