@@ -97,7 +97,7 @@ define(["messenger"], function(messenger) {
         }
         this.map.setCenter(bounds.getCenter());
 console.log(bounds);
-        //this.map.fitBounds(bounds);
+        this.map.fitBounds(bounds);
         this.map.setZoom(this.map.getZoom() - 1);
         return this;
     }
@@ -126,7 +126,7 @@ console.log(bounds);
                     else {
                         infowindow.open(that.map, marker.marker);
                     }
-                    // that.openInfoWindow = infowindow;
+                    that.openInfoWindow = infowindow;
                 });
             }
             else {
