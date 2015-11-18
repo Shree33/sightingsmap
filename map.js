@@ -128,8 +128,10 @@ define(["messenger"], function(messenger) {
                     //that.openInfoWindow = infowindow;
                 });
             }
-            else {
-                sighting.trigger("bounce");
+            else if (sighting.marker.getMap()) {
+                if (sighting.bird) {
+                    // sighting.bird.trigger("bounce");
+                }
             }
         });
         that.fitToBounds()
