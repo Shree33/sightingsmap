@@ -116,7 +116,7 @@ define(["messenger"], function(messenger) {
                 var infowindow = new google.maps.InfoWindow(
                   { 
                     content: win_date,
-		    maxWidth: 500px,
+		    maxWidth: 500
                   });
 		infowindow.setContent(win_date);
 		infowindow.open(that.map, marker.marker);
