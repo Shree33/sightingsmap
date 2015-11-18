@@ -117,6 +117,7 @@ console.log(bounds);
                   { 
                     content: "<span class='marker-date'>" + sighting.get("date").format("M/D/YY") + "</span>",
                   });
+		console.log(sighting.get("date").format("M/D/YY"));
                 infowindow.open(that.map, marker.marker);
                 google.maps.event.addListener(marker.marker, 'click', function() {
                     if (infowindow.getMap() !== null) {
