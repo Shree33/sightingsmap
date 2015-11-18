@@ -117,6 +117,7 @@ define(["messenger"], function(messenger) {
                   { 
                     content: win_date,
                   });
+		infowindow.setContent(win_date);
 		infowindow.open(that.map, marker.marker);
                 google.maps.event.addListener(marker.marker, 'click', function() {
                     if (infowindow.getMap() !== null) {
