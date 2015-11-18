@@ -112,12 +112,12 @@ define(["messenger"], function(messenger) {
                 sighting.marker = marker.marker;
                 sighting.latLng = marker.latLng;
                 sighting.marker.setIcon(parent.marker_url);
+		win_date = sighting.get("date").format("M/D/YY");
                 var infowindow = new google.maps.InfoWindow(
                   { 
-                    content: sighting.get("date").format("M/D/YY"),
+                    content: win_date,
                   });
-		console.log(sighting.get("date").format("M/D/YY"));
-                infowindow.open(that.map, marker.marker);
+		infowindow.open(that.map, marker.marker);
                 google.maps.event.addListener(marker.marker, 'click', function() {
                     if (infowindow.getMap() !== null) {
                         infowindow.close()
