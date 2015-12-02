@@ -75,11 +75,10 @@ define(["messenger"], function(messenger){
             }
             var lat = this.get("lat");
             var lng = this.get("lng");
-            
-	    var dir = Math.random() > .5 ? 1 : -1;
+
             this.set({
-                lat: lat + dir*Math.random()/1000,
-                lng: lng + dir*Math.random()/1000
+                lat: lat + (Math.random() - .5) /1500,
+                lng: lng + (Math.random() - .5) /1500
             });
 	
 
