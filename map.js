@@ -44,6 +44,8 @@ define(["messenger"], function(messenger) {
             zoom: 8
         });    
 
+	var MarkerCluster = new MarkerClusterer(this.map);
+
         var that = this;
         this.active_sighting_models = new Backbone.Collection();
         this.active_sighting_models.comparator = function(model) {
@@ -141,7 +143,9 @@ define(["messenger"], function(messenger) {
             }
         });
 	
-    var MarkerCluster = new google.maps.MarkerClusterer(this, allMarkers);
+	allMarkers.each(function(currentMarker) {
+		MarkerCluster.addMarker(currentMarker);
+	}
         that.fitToBounds()
     }
 
