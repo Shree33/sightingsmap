@@ -35,6 +35,7 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
             var tokens = [sighting.get("bandcolor")];
             var loc = sighting.get("sightinglocation");
             var className = sighting.getBandsClassName();
+	    var birdsightings = bird.get("sightings");
 
             by_band.push({
                 tokens: tokens,
@@ -51,6 +52,7 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
                 bandnumber: bandnumber,
                 model: sighting,
                 className: className,
+		sightingslength: birdsightings.length;
             });
             if (_.isUndefined(addedPlaces[loc])) {
                 var loc_id = loc.toLowerCase().replace(" ", "");
@@ -109,7 +111,7 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
                 },
                 templates: {
                     empty: "<div class='tt-empty-results'>No results found.</div>",
-                    suggestion: _.compile($("#suggestion-location-template").html()),
+                    suggestion: _.compile($("#suggestion-template").html()),
                     header: "<h2>By Bands</h2>"
                 }
             },
