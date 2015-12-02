@@ -82,6 +82,7 @@ define(["messenger"], function(messenger) {
             })
         })
     }
+
     
     Map.prototype.getActiveSightings = function() {
         this.active_sighting_models.sort();
@@ -107,6 +108,7 @@ define(["messenger"], function(messenger) {
 
     Map.prototype.showMarkers = function(sightings, parent) {
         var that = this;
+	var allMarkers = [];
         that.active_sighting_models.add(sightings.models);
         sightings.each(function(sighting) {
             sighting.allsightings = that.active_sighting_models;
@@ -116,6 +118,7 @@ define(["messenger"], function(messenger) {
                 sighting.marker = marker.marker;
                 sighting.latLng = marker.latLng;
                 sighting.marker.setIcon(parent.marker_url);
+		allMarkers.push(marker);
                 var infowindow = new google.maps.InfoWindow(
                   { 
                     content: "<span class='marker-date'>" + sighting.get("date").format("M/D/YY") + "</span>",
@@ -137,6 +140,8 @@ define(["messenger"], function(messenger) {
                 }
             }
         });
+	
+    var MarkerCluster = new MarkerClusterer(this, allMarkers);
         that.fitToBounds()
     }
 
