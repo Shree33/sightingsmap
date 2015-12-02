@@ -73,8 +73,8 @@ define(["messenger"], function(messenger){
                 birds.add(bird)
                 this.bird = bird;
             }
-            var lat = this.get("lat");
-            var lng = this.get("lng");
+            var lat = Number(this.get("lat"));
+            var lng = Number(this.get("lng"));
 
 	    console.log(lat + "," + lng);
 
