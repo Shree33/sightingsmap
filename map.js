@@ -141,7 +141,7 @@ define(["messenger"], function(messenger) {
             }
         });
 	
-    var MarkerCluster = new MarkerClusterer(this, allMarkers);
+    var MarkerCluster = new google.maps.MarkerClusterer(this, allMarkers);
         that.fitToBounds()
     }
 
