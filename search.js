@@ -104,12 +104,12 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
                 displayKey: "val",
                 source: function(query, cb) {
                     band_engine.get(query, function(suggestions) {
-                        cb(filter(suggestions, "val"));
+                        cb(filter(suggestions, "bandnumber"));
                     });
                 },
                 templates: {
                     empty: "<div class='tt-empty-results'>No results found.</div>",
-                    suggestion: _.compile($("#suggestion-template").html()),
+                    suggestion: _.compile($("#suggestion-location-template").html()),
                     header: "<h2>By Bands</h2>"
                 }
             },
