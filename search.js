@@ -104,7 +104,7 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
                 displayKey: "val",
                 source: function(query, cb) {
                     band_engine.get(query, function(suggestions) {
-                        cb(filter(suggestions, "bandnumber"));
+                        cb(filter(suggestions, "val"));
                     });
                 },
                 templates: {
@@ -128,7 +128,6 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
         }).on("typeahead:selected", function(e, suggestion) {
             switch(suggestion.type) {
                 case "bandnumber":
-			console.log("Getting into the bandnumber case");
                 case "bandstring":
                     var bird = bird_data.getBirds()._byId[suggestion.bandnumber]
                     if (bird) {
@@ -137,7 +136,6 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
                     }
                 break;
                 case "location":
-			console.log("Getting into the location case");
                     selected[suggestion.val] = true;
                     messenger.dispatch("show:location", suggestion.val, suggestion.sightings);
                 break;
@@ -146,7 +144,6 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
         });
 
         messenger.when("add:filter", function(id) {
-console.log("GETTING HERE!");
             console.log(id);
             selected[id] = true;
         })
