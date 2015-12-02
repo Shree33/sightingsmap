@@ -127,7 +127,9 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
             },
         }).on("typeahead:selected", function(e, suggestion) {
             switch(suggestion.type) {
-                case "bandnumber": 
+                case "bandnumber":
+			selected[suggestion.val] = true;
+		        messenger.dispatch("show:bandnumber", suggestion.val, suggestion.sightings);
                 case "bandstring":
                     var bird = bird_data.getBirds()._byId[suggestion.bandnumber]
                     if (bird) {
