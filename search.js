@@ -43,7 +43,8 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
                 type: "bandstring",
                 bandnumber: bandnumber,
                 model: sighting,
-                className: className
+                className: className,
+		sightingslength: birdsightings.length
             });
             by_band.push({
                 tokens: tokens,
@@ -52,7 +53,7 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
                 bandnumber: bandnumber,
                 model: sighting,
                 className: className,
-		sightingslength: birdsightings.length;
+		sightingslength: birdsightings.length
             });
             if (_.isUndefined(addedPlaces[loc])) {
                 var loc_id = loc.toLowerCase().replace(" ", "");
