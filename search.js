@@ -128,8 +128,7 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
         }).on("typeahead:selected", function(e, suggestion) {
             switch(suggestion.type) {
                 case "bandnumber":
-			selected[suggestion.val] = true;
-		        messenger.dispatch("show:bandnumber", suggestion.val, suggestion.sightings);
+			console.log("Getting into the bandnumber case");
                 case "bandstring":
                     var bird = bird_data.getBirds()._byId[suggestion.bandnumber]
                     if (bird) {
@@ -138,6 +137,7 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
                     }
                 break;
                 case "location":
+			console.log("Getting into the location case");
                     selected[suggestion.val] = true;
                     messenger.dispatch("show:location", suggestion.val, suggestion.sightings);
                 break;
