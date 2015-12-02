@@ -76,8 +76,12 @@ define(["messenger"], function(messenger){
             var lat = this.get("lat");
             var lng = this.get("lng");
 
+	    console.log(lat + "," + lng);
+
 	    lat = lat + ((Math.random() - .5) / 1500);
 	    lng = lng + ((Math.random() - .5) / 1500);
+
+		console.log(lat + "," + lng);
 
             bird.addSighting(this);
             var loc = by_location[this.get("sightinglocation").toLowerCase().replace(" ", "")]
