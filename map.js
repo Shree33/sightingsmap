@@ -21,7 +21,7 @@ define(["messenger"], function(messenger) {
 
             this.latLng = new google.maps.LatLng(sighting.get("lat"), sighting.get("lng"));
 
-		console.log(sighting.get("lat") + "," + sighting.get("lng"));
+		//console.log(sighting.get("lat") + "," + sighting.get("lng"));
 	    
 
 	    this.marker = new google.maps.Marker({

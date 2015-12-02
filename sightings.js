@@ -102,6 +102,9 @@ define(["messenger"], function(messenger){
             });
             var bandnum = sanitized["bandnumber"]
             var date = moment(sanitized["date"])
+
+	console.log(sanitized["lat"];
+	console.log(sanitized["lng"];
 	var lat = sanitized["lat"];
 	var lng = sanitized["lng"];
 
