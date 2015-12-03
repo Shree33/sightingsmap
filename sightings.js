@@ -76,8 +76,6 @@ define(["messenger"], function(messenger){
             var lat = Number(this.get("lat"));
             var lng = Number(this.get("lng"));
 
-	    console.log(lat + "," + lng);
-
             var dir = Math.random() > .5 ? 1 : -1;
             this.set({
                 lat: lat + dir*Math.random()/1000,
