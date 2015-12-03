@@ -44,7 +44,7 @@ define(["messenger"], function(messenger) {
             zoom: 8
         });    
 
-	MarkerCluster = new MarkerClusterer(this.map);
+	MarkerCluster = new MarkerClusterer();
 
         var that = this;
         this.active_sighting_models = new Backbone.Collection();
