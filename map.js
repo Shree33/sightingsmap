@@ -143,9 +143,9 @@ define(["messenger"], function(messenger) {
             }
         });
 	
-	allMarkers.each(function(currentMarker) {
-		//MarkerCluster.addMarker(currentMarker);
-	});
+	for (var current_marker in allMarkers) {
+		
+	}
         that.fitToBounds()
     }
 
