@@ -1,4 +1,7 @@
+// So this is Messenger is created, it then is supposed 
+// to dispatch something when the "show all" button is clicked
 define(["messenger"], function(messenger){
+    //
     function parseNums(obj) {
         _.each(obj, function(val, key) {
             if (!_.isNaN(parseFloat(val))) {
@@ -22,6 +25,7 @@ define(["messenger"], function(messenger){
         var i = 0;
 
         return function() {
+            // Index iterates over markers and going past length brings it back to 0
             var index = i++ % markers.length;
             if (index === 0) {
                 return null;
@@ -32,20 +36,26 @@ define(["messenger"], function(messenger){
         }
     }
 
-    // Bird has many sightings
+    // Each Bird object has multiple sightings
     var Bird = Backbone.Model.extend({
         defaults: function() {
             return {
                 sightings: new Sightings
             }
         },
+        // When this is called the sighting in the arg is put into 
+        // the sightings collection for the current bird
         addSighting: function(sighting) {
+            // "This" in this case refers to Bird
             this.get("sightings").add(sighting);
             return this;
         }
     })
+    // Collection of birds
     var Birds = Backbone.Collection.extend({
+        // Look up how this "model" thing works in backbone
         model: function(m) {
+            // Ditto on instanceof
             if (m instanceof Bird) {
                 return Bird
             }
@@ -53,36 +63,45 @@ define(["messenger"], function(messenger){
                 return Location;
             }
         },
+        // The title "initialize" is obvious but the things going on inside are not
         initialize: function() {
+            // Calls "next" to get next marker with a rotating color
             var next = getNextMarkerUrl();
+            // Confused about the next two lines, I get what they do but am confused on the specifics
             this.on("add", function(bird) {
                 bird.marker_url = next();
             })
         }
     })
 
+    // This function creates a new instance of a sighting from data given
+    // If bird is new, new bird is created and added to the collection
     var Sighting = Backbone.Model.extend({
         initialize: function(){
+            // Get a bird from the bird collection
             var bird = birds._byId[this.get("bird_id")]
+            // If its undefined, create a new instance of bird
             if (_.isUndefined(bird)) {
                 bird = new Bird({
                     bandnumber: this.get("bandnumber"),
                     bandstring: this.getBandString()
                 })
                 bird.id = this.get("bird_id");
+                // add it to birds collection as a new bird
                 birds.add(bird)
                 this.bird = bird;
             }
             var lat = Number(this.get("lat"));
             var lng = Number(this.get("lng"));
-
+            // Why is this randomized/ made askew a little? security/privacy?
             var dir = Math.random() > .5 ? 1 : -1;
             this.set({
                 lat: lat + dir*Math.random()/1000,
                 lng: lng + dir*Math.random()/1000
             });
-
+            // Add this sighting to the bird's collection
             bird.addSighting(this);
+            // Also add sighting to collection organized by location found?
             var loc = by_location[this.get("sightinglocation").toLowerCase().replace(" ", "")]
             if (typeof loc === "undefined") {
                 by_location[this.get("sightinglocation").toLowerCase().replace(" ", "")] = new Sightings([this]);
@@ -91,6 +110,7 @@ define(["messenger"], function(messenger){
                 by_location[this.get("sightinglocation").toLowerCase().replace(" ", "")].add(this);
             }
         },
+        // Takes in and parses through r to grab all the info for a sighting
         parse: function(r) {
             var p = "gsx$";
             // Get only relevant properties
@@ -106,15 +126,15 @@ define(["messenger"], function(messenger){
             var date = moment(sanitized["date"])
 
             var lat = sanitized["lat"];
-	    var lng = sanitized["lng"];
+            var lng = sanitized["lng"];
 
 
-	    return  _.omit(_.extend(sanitized, {date: date, bird_id: bandnum, lat: lat, lng: lng}), function(value, key) {
+        return  _.omit(_.extend(sanitized, {date: date, bird_id: bandnum, lat: lat, lng: lng}), function(value, key) {
                 key.indexOf(p) !== -1;
             });
         },
         getBandString: function() {
-	    var bandcolor = this.get("bandcolor") || "X";
+        var bandcolor = this.get("bandcolor") || "X";
             return bandcolor;
         },
         hasLocation: function() {
@@ -125,7 +145,9 @@ define(["messenger"], function(messenger){
             return "bandcolor-" + json.bandcolor;
         }
     });
-
+    // I don't know what the following does, 
+    // possibly extend a collection of sightings with a 
+    // new sighting? but that doesnt make sense
     var Sightings = Backbone.Collection.extend({
         model: Sighting,
         parse: function(response) {
@@ -352,3 +374,4 @@ define(["messenger"], function(messenger){
         }
     }
 })
+

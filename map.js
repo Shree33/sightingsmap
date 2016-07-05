@@ -21,10 +21,10 @@ define(["messenger"], function(messenger) {
 
             this.latLng = new google.maps.LatLng(sighting.get("lat"), sighting.get("lng"));
 
-		//console.log(sighting.get("lat") + "," + sighting.get("lng"));
-	    
+        //console.log(sighting.get("lat") + "," + sighting.get("lng"));
+        
 
-	    this.marker = new google.maps.Marker({
+        this.marker = new google.maps.Marker({
                 position: this.latLng,
                 title: sighting.getBandString() + " sighted here",
                 animation: google.maps.Animation.DROP
@@ -44,8 +44,9 @@ define(["messenger"], function(messenger) {
             zoom: 8
         });    
 
-	var mapForCluster = this.map;
-	MarkerCluster = new MarkerClusterer(mapForCluster);
+    var mapForCluster = this.map;
+    // THIS IS UNDEFINED ACCORDING TO CHROME
+    MarkerCluster = new MarkerClusterer(mapForCluster);
 
         var that = this;
         this.active_sighting_models = new Backbone.Collection();
@@ -111,7 +112,7 @@ define(["messenger"], function(messenger) {
 
     Map.prototype.showMarkers = function(sightings, parent) {
         var that = this;
-	var allMarkers = [];
+    var allMarkers = [];
         that.active_sighting_models.add(sightings.models);
         sightings.each(function(sighting) {
             sighting.allsightings = that.active_sighting_models;
@@ -121,12 +122,12 @@ define(["messenger"], function(messenger) {
                 sighting.marker = marker.marker;
                 sighting.latLng = marker.latLng;
                 sighting.marker.setIcon(parent.marker_url);
-		allMarkers.push(sighting.marker);
+        allMarkers.push(sighting.marker);
                 var infowindow = new google.maps.InfoWindow(
                   { 
                     content: "<span class='marker-date'>" + sighting.get("date").format("M/D/YY") + "</span>",
                   });
-		infowindow.open(that.map, marker.marker);
+        infowindow.open(that.map, marker.marker);
                 google.maps.event.addListener(marker.marker, 'click', function() {
                     if (infowindow.getMap() !== null) {
                         infowindow.close()
@@ -143,8 +144,8 @@ define(["messenger"], function(messenger) {
                 }
             }
         });
-	
-	MarkerCluster.addMarkers(allMarkers);
+    
+    MarkerCluster.addMarkers(allMarkers);
         that.fitToBounds()
     }
 
