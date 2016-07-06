@@ -1,7 +1,5 @@
-// So this is Messenger is created, it then is supposed 
 // to dispatch something when the "show all" button is clicked
 define(["messenger"], function(messenger){
-    //
     function parseNums(obj) {
         _.each(obj, function(val, key) {
             if (!_.isNaN(parseFloat(val))) {

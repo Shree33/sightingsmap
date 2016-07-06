@@ -20,6 +20,7 @@ define(["moment", "map", "sightings", "search", "timeline", "router","typeahead"
             // Creating an instance of the map
             map.getMapInstance(document.getElementById("map-canvas"));
             // Initialize Sightings
+                        console.log("Shree");
             sightings.initialize();
                 // t = timeline.initialize({map: map.map, collection: map.getActiveSightings()});
                 // t.render();
