@@ -171,7 +171,6 @@
         });
 
         messenger.when("add:filter", function(id) {
-            console.log(id);
             selected[id] = true;
         })
 
