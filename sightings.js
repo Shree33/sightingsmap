@@ -1,3 +1,7 @@
+/**
+ * Sightings.js
+ * Creates 2 collections of sightings based on bird and on location
+ */
 define(["messenger"], function(messenger){
     function parseNums(obj) {
         _.each(obj, function(val, key) {
@@ -10,15 +14,17 @@ define(["messenger"], function(messenger){
         })
         return obj;
     }
-
+    // Used to center map at initialization
     var location_shortcuts = {
         "JCNWR": "James Campebell National Wildlife Refuge"
     }
 
     var by_location = {};
 
+    // Gets the next marker image with a different color
     function getNextMarkerUrl() {
-        var markers = [null,"greenpoi", "orange", "bluepoi", "sienna", "turquoise", "purplepoi"];
+        var markers = [null,"greenpoi", "orange", "bluepoi", "sienna", 
+                       "turquoise", "purplepoi"];
         var i = 0;
 
         return function() {
@@ -32,18 +38,22 @@ define(["messenger"], function(messenger){
         }
     }
 
-    // Bird has many sightings
+    // Each Bird object has multiple sightings
     var Bird = Backbone.Model.extend({
         defaults: function() {
             return {
                 sightings: new Sightings
             }
         },
+        // When this is called the sighting in the arg is put into 
+        // the sightings collection for the current bird
         addSighting: function(sighting) {
             this.get("sightings").add(sighting);
             return this;
         }
     })
+
+    // Collection of birds
     var Birds = Backbone.Collection.extend({
         model: function(m) {
             if (m instanceof Bird) {
@@ -54,6 +64,7 @@ define(["messenger"], function(messenger){
             }
         },
         initialize: function() {
+            // Calls "next" to get next marker with a rotating color
             var next = getNextMarkerUrl();
             this.on("add", function(bird) {
                 bird.marker_url = next();
@@ -61,71 +72,92 @@ define(["messenger"], function(messenger){
         }
     })
 
+    /*
+     * Creates a new instance of a sighting from data given
+     * If bird is new, new bird is created and added to the collection
+     */
     var Sighting = Backbone.Model.extend({
         initialize: function(){
+            // Get a bird from the bird collection
             var bird = birds._byId[this.get("bird_id")]
+            // If its undefined, create a new instance of bird
             if (_.isUndefined(bird)) {
                 bird = new Bird({
                     bandnumber: this.get("bandnumber"),
                     bandstring: this.getBandString()
                 })
                 bird.id = this.get("bird_id");
+                // Add it to birds collection as a new bird
                 birds.add(bird)
                 this.bird = bird;
             }
             var lat = Number(this.get("lat"));
             var lng = Number(this.get("lng"));
-
+            // Randomizer still necessary for when map is zoomed in all the way
             var dir = Math.random() > .5 ? 1 : -1;
+
             this.set({
                 lat: lat + dir*Math.random()/1000,
                 lng: lng + dir*Math.random()/1000
             });
-
             bird.addSighting(this);
-            var loc = by_location[this.get("sightinglocation").toLowerCase().replace(" ", "")]
+            // Also add sighting to collection organized by location found?
+            var loc = by_location[this.get("sightinglocation").toLowerCase()
+                                            .replace(" ", "")]
             if (typeof loc === "undefined") {
-                by_location[this.get("sightinglocation").toLowerCase().replace(" ", "")] = new Sightings([this]);
+                by_location[this.get("sightinglocation").toLowerCase()
+                                    .replace(" ", "")] = new Sightings([this]);
             }
             else {
-                by_location[this.get("sightinglocation").toLowerCase().replace(" ", "")].add(this);
+                by_location[this.get("sightinglocation").toLowerCase()
+                                    .replace(" ", "")].add(this);
             }
         },
+
+        // Takes in and parses through r to grab all the info for a sighting
         parse: function(r) {
             var p = "gsx$";
             // Get only relevant properties
-            var sanitized = _.pick(r, p+"lat", p+"lng", p + "bandcolor", p+"sightinglocation", p+"date", p+"bandnumber")
+            var sanitized = _.pick(r, p+"lat", p+"lng", p + "bandcolor", 
+                                   p+"sightinglocation", p+"date",
+                                   p+"bandnumber")
             // Parse location shortcuts
             _.each(sanitized, function(val, key) {
                 sanitized[key.replace(p, "")] = val.$t;
                 if (location_shortcuts[sanitized[key]]) {
-                    sanitized[key.replace(p, "")] = location_shortcuts[sanitized[key]]
+                    sanitized[key.replace(p, "")] = 
+                        location_shortcuts[sanitized[key]]
                 }
             });
             var bandnum = sanitized["bandnumber"]
             var date = moment(sanitized["date"])
 
             var lat = sanitized["lat"];
-	    var lng = sanitized["lng"];
+            var lng = sanitized["lng"];
 
 
-	    return  _.omit(_.extend(sanitized, {date: date, bird_id: bandnum, lat: lat, lng: lng}), function(value, key) {
+        return  _.omit(_.extend(sanitized, {date: date, bird_id: bandnum,
+                                             lat: lat, lng: lng}), 
+                       function(value, key) {
                 key.indexOf(p) !== -1;
             });
         },
         getBandString: function() {
-	    var bandcolor = this.get("bandcolor") || "X";
+        var bandcolor = this.get("bandcolor") || "X";
             return bandcolor;
         },
         hasLocation: function() {
-            return !_.isUndefined(this.get("lat")) && !_.isUndefined(this.get("lng"));
+            return !_.isUndefined(this.get("lat")) 
+                   && !_.isUndefined(this.get("lng"));
         },
         getBandsClassName: function(){
             var json = this.toJSON();
             return "bandcolor-" + json.bandcolor;
         }
     });
-
+    // I don't know what the following does, 
+    // possibly extend a collection of sightings with a 
+    // new sighting?
     var Sightings = Backbone.Collection.extend({
         model: Sighting,
         parse: function(response) {
@@ -134,7 +166,9 @@ define(["messenger"], function(messenger){
     });
 
 
-
+    /**
+     * Creates the label when a bird is selected from search query
+     */
     var SingleBird = Backbone.View.extend({
         tagName: "li",
         template: $("#single-bird-listitem").html(),
@@ -153,23 +187,26 @@ define(["messenger"], function(messenger){
                         that.remove();
                     }, 200)
                 },
-                "bounce": function() {
+                // I removed bounce since it is distracting. 
+                /*"bounce": function() {
                     var $el = this.$el;
                     $el.addClass("already-selected");
                     setTimeout(function() {
                         $el.removeClass("already-selected");
                     }, 3000)
-                }
+                }*/
             })
         },
         toggleBirdInfo: function() { 
             var tooltip = this.$(".info-tooltip")
-            $(".info-tooltip").not("[data-bandnum=" + this.model.get("bandnumber") + "]").hide()
+            $(".info-tooltip").not("[data-bandnum=" + 
+                                    this.model.get("bandnumber") + "]").hide()
             if (!tooltip.html()) {
                 tooltip.html(_.template($("#bird-info").html(), _.extend(
                     this.model.toJSON(), {
                         numsightings: this.model.get("sightings").length,
-                        taggedat: this.model.get("sightings").at(0).get("sightinglocation")
+                        taggedat: this.model.get("sightings")
+                                            .at(0).get("sightinglocation")
                     }
                 )
                 )).fadeIn("fast")
@@ -180,7 +217,8 @@ define(["messenger"], function(messenger){
         },
         render: function() {
             this.$el.html(_.template(this.template, this.model.toJSON()))
-            this.$el.addClass("color " + new String(this.model.marker_url).replace(".png", "").replace("images/", ""));
+            this.$el.addClass("color " + new String(this.model.marker_url)
+                              .replace(".png", "").replace("images/", ""));
             return this;
         },
         events: {
@@ -190,7 +228,8 @@ define(["messenger"], function(messenger){
                     if (sighting.marker) {
                         that.mouseentertime = new Date().getTime();
                         sighting.marker.setZIndex(9);
-                        sighting.marker.setAnimation(google.maps.Animation.BOUNCE)
+                        sighting.marker.setAnimation(google.maps
+                                                    .Animation.BOUNCE)
                     }
                     if (sighting.mouseleavetimeout) {
                         clearTimeout(sighting.mouseleavetimeout);
@@ -216,7 +255,8 @@ define(["messenger"], function(messenger){
                 this.toggleBirdInfo()
             },
             "click .js-remove-bird": function(e) {
-                messenger.dispatch("remove:filter", this.model.get("bandnumber"));
+                messenger.dispatch("remove:filter", 
+                                    this.model.get("bandnumber"));
                 this.model.birdlist_collection.remove(this.model.cid);
                 var that = this;
                 this.model.get("sightings").each(function(sighting) {
@@ -259,6 +299,9 @@ define(["messenger"], function(messenger){
         }
     });
 
+    /**
+     * Defines a collection of birds
+     */
     var BirdList = Backbone.View.extend({
         el: "#active-bird-list",
         initialize: function() {
@@ -287,7 +330,9 @@ define(["messenger"], function(messenger){
     var birds = new Birds()
     var sightings = new Sightings()
     var ActiveBirdList = new BirdList({collection: new Birds()});
-    ActiveBirdList.listenTo(messenger, "add:sightings", function(sightings, bird, opts) {
+    // Adds bird to ActiveBirdList.collection when search query is selected
+    ActiveBirdList.listenTo(messenger, "add:sightings",
+                            function(sightings, bird, opts) {
         opts = _.extend({}, opts);
         sightings.each(function(sighting) {
             var bird = sighting.bird;
@@ -298,7 +343,13 @@ define(["messenger"], function(messenger){
             
         })
     });
-    ActiveBirdList.listenTo(messenger, "show:location", function(location, sightings) {
+
+    /**
+     * Sets the location when search query location is selected
+     * Initiates show:markers for sightings at location
+     */
+    ActiveBirdList.listenTo(messenger, "show:location", function(location,
+                                                                 sightings) {
         location = new Location({val: location});
         location.set("numsightings", sightings.length);
         location.set("sightings", sightings);
@@ -317,6 +368,10 @@ define(["messenger"], function(messenger){
         })
     }
 
+    /**
+     * Note: Unsure about this
+     *       the spreadsheet in the obfuscation.txt is a broken link.
+     */ 
     function getKey(done) {
         done = done || function(){};
         $.ajax({
@@ -352,3 +407,4 @@ define(["messenger"], function(messenger){
         }
     }
 })
+

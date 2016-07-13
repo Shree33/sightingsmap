@@ -1,3 +1,9 @@
+/**
+ * router.js
+ * Description: Generates the URL based on active markers. 
+ *              Uses Backbone.js's Router function
+ */
+
 define(["messenger", "sightings"], function(messenger, sightings) {
     var Router = Backbone.Router.extend({
         initialize: function() {
@@ -12,23 +18,27 @@ define(["messenger", "sightings"], function(messenger, sightings) {
                     }
 
                     var current = Backbone.history.fragment.split("/").slice(1);
-
+                    // Builds URL from bird band
                     if (opts.location === true) {
                         if (current.indexOf(bird.get("val")) === -1) {
                             current.push(bird.get("val"));
-                            this.navigate("birds/" + current.join("/"), {replace: false, trigger: false});
+                            this.navigate("birds/" + current.join("/"), 
+                                {replace: false, trigger: false});
                         }
                     }
                     else {
                         var i = active_birds.indexOf(bird);
                         current.splice(i,1,bird.get("bandnumber"));
-                        messenger.dispatch("add:sightings", bird.get("sightings"), bird);
+                        messenger.dispatch("add:sightings", 
+                                            bird.get("sightings"), bird);
                         this.active_birds.add(bird, {from_route: true});
-                        this.navigate("birds/" + current.join("/"), {replace: false, trigger: false});
+                        this.navigate("birds/" + current.join("/"),
+                                      {replace: false, trigger: false});
                     }
                 },
                 "remove": function() {
-                    this.navigate(this.constructURL(), {replace: true, trigger: true});
+                    this.navigate(this.constructURL(), {replace: true,
+                                                        trigger: true});
                 }
             })
         },
@@ -59,7 +69,8 @@ define(["messenger", "sightings"], function(messenger, sightings) {
             _.each(identifiers, function(id){
                 var bird = that.all_birds._byId[id];
                 if (bird){
-                    messenger.dispatch("add:sightings", bird.get("sightings"), bird);
+                    messenger.dispatch("add:sightings", 
+                                        bird.get("sightings"), bird);
                     messenger.dispatch("add:filter", bird.get("bandnumber"));
                 }
                 else {
@@ -74,7 +85,6 @@ define(["messenger", "sightings"], function(messenger, sightings) {
         }
 
     })
-
     messenger.when("loaded:sightings", function(){
         app = new Router();
         Backbone.history.start();

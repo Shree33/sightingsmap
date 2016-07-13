@@ -1,3 +1,9 @@
+/**
+ * Timeline.js
+ * Description: allows for a timeline to appear in the foooter for a bird.
+ * Note: The timeline does not currently work and has been hidden for now
+ *       This script is still necessary for rendering the map properly
+ */
 define(["messenger"], function(messenger){
   var Timeline = Backbone.View.extend({
     el: 'footer',
@@ -118,8 +124,11 @@ define(["messenger"], function(messenger){
       }, this.speeds[this.dir]);
       return this;
     },
+    // NOTE: Collection is currently undefined as it can not properly get
+    //        Active_bird_list from map.js
     updateHandles: function() {
       var $timeline, handles, max, maxdate, min, mindate, prevcomparator;
+      console.log(this.collection);
       if (this.collection.length < 2) {
         this.$el.fadeOut("fast");
         return this;
