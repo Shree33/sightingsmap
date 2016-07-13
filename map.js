@@ -1,5 +1,13 @@
+/**
+ * map.js
+ * Description: Defines and create map canvas. Displays
+ */
+
 define(["messenger"], function(messenger) {
 
+    /**
+     * Defines marker properties for each active marker
+     */
     var Marker = Backbone.View.extend({
         initialize: function(attrs) {
             this.map = attrs.map;
@@ -19,9 +27,9 @@ define(["messenger"], function(messenger) {
                 } 
             });
 
-            this.latLng = new google.maps.LatLng(sighting.get("lat"), sighting.get("lng"));
+            this.latLng = new google.maps.LatLng(sighting.get("lat"),
+                                                 sighting.get("lng"));
 
-        //console.log(sighting.get("lat") + "," + sighting.get("lng"));
         
 
         this.marker = new google.maps.Marker({
@@ -38,15 +46,17 @@ define(["messenger"], function(messenger) {
         }
     })
 
+    /**
+     * Creates map and active_sightings_models collection
+     */
     function Map(el) {
         this.map = new google.maps.Map(el, {
             center: {lat: 43.08087, lng: -70.76028},
             zoom: 8
         });    
 
-    var mapForCluster = this.map;
-    // THIS IS UNDEFINED ACCORDING TO CHROME
-    MarkerCluster = new MarkerClusterer(mapForCluster);
+        var mapForCluster = this.map;
+        MarkerCluster = new MarkerClusterer(mapForCluster);
 
         var that = this;
         this.active_sighting_models = new Backbone.Collection();
@@ -68,11 +78,6 @@ define(["messenger"], function(messenger) {
 
         _.bindAll(this, "showMarkers");
 
-        // messenger.when("add:sightings", function(sightings, bird) {
-            // console.log(sightings.at(0));
-            // debugger
-            // that.showMarkers.call(that, sightings, bird);
-        // });
 
         messenger.when("toggle:markers", function(lowerbound, upperbound) {
             that.active_sighting_models.each(function(model) {
@@ -87,12 +92,15 @@ define(["messenger"], function(messenger) {
         })
     }
 
-    
+
     Map.prototype.getActiveSightings = function() {
         this.active_sighting_models.sort();
         return this.active_sighting_models;
     }
 
+    /**
+     * Resizes map to fit all of the active marker locations on the map.
+     */
     Map.prototype.fitToBounds = function() {
         var bounds = new google.maps.LatLngBounds();
         var len = this.active_sighting_models.length;
@@ -110,6 +118,9 @@ define(["messenger"], function(messenger) {
         return this;
     }
 
+    /**
+     * Creates and renders markers on the map with infowindows
+     */
     Map.prototype.showMarkers = function(sightings, parent) {
         var that = this;
     var allMarkers = [];
@@ -125,22 +136,29 @@ define(["messenger"], function(messenger) {
         allMarkers.push(sighting.marker);
                 var infowindow = new google.maps.InfoWindow(
                   { 
-                    content: "<span class='marker-date'>" + sighting.get("date").format("M/D/YY") + "</span>",
+                    // Change data shown in infowindow here
+                    content: "<p> Bird ID: " + sighting.get("bird_id")+ "</p>" +
+                             "<p> Color: " + sighting.getBandString() + "</p>" + 
+                             "<p> Date: " + 
+                             sighting.get("date").format("M/D/YY") + "</p>",
                   });
+
+        // Infowindow toggle for each marker
         infowindow.open(that.map, marker.marker);
-                google.maps.event.addListener(marker.marker, 'click', function() {
+                google.maps.event.addListener(marker.marker, 'click', 
+                                              function() {
                     if (infowindow.getMap() !== null) {
                         infowindow.close()
                     }
                     else {
                         infowindow.open(that.map, marker.marker);
                     }
-                    //that.openInfoWindow = infowindow;
+                    that.openInfoWindow = infowindow;
                 });
             }
             else if (sighting.marker.getMap()) {
                 if (sighting.bird) {
-                    // sighting.bird.trigger("bounce");
+                    sighting.bird.trigger("bounce");
                 }
             }
         });
@@ -149,9 +167,14 @@ define(["messenger"], function(messenger) {
         that.fitToBounds()
     }
 
+    var activeSightings = new Backbone.Collection();
+    activeSightings = this.active_sighting_models;
     return {
         getMapInstance: function(el) {
             return new Map(el);
-        }
+        },
+        getActiveSightings: function() {
+            return activeSightings;
+        },
     }
 })

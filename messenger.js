@@ -1,3 +1,7 @@
+/**
+ * Messenger.js
+ * Extends definition of messenger, a function in Backbone
+ */
 define(function() {
     messenger = _.extend({}, Backbone.Events)
     // Semantic aliases

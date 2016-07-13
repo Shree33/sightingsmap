@@ -640,7 +640,7 @@ MarkerClusterer.prototype.getExtendedBounds = function(bounds) {
 
 
 /**
- * Determins if a marker is contained in a bounds.
+ * Determines if a marker is contained in a bounds.
  *
  * @param {google.maps.Marker} marker The marker to check.
  * @param {google.maps.LatLngBounds} bounds The bounds to check against.
@@ -685,7 +685,7 @@ MarkerClusterer.prototype.resetViewport = function(opt_hide) {
 };
 
 /**
- *
+ * Removes old clusters when the map is zoomed
  */
 MarkerClusterer.prototype.repaint = function() {
   var oldClusters = this.clusters_.slice();

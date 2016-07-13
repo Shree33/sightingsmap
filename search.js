@@ -1,9 +1,14 @@
-define(["messenger", "sightings"], function(messenger, bird_data) {
+/**
+ * search.js
+ * Description: Accepts input from search bar and autocompletes results 
+ *              based on band number, color and location
+ */
 
+ define(["messenger", "sightings"], function(messenger, bird_data) {
     $searchbar = $("#searchbar");
 
     (function (_) {
-        'use strict';
+        "use strict";
 
         _.compile = function (templ) {
             var compiled = this.template(templ);
@@ -22,8 +27,12 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
         });
     }
 
+    /**
+     * Checks data set to find a match with search query. 
+     * Returns two list of matching texts by location and by band
+     */
     function parse(birds) {
-        var addedPlaces = {};
+        var addedPlaces = {};   
         var addedBirds = {};
         var by_band = []
         var by_place = []
@@ -35,7 +44,7 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
             var tokens = [sighting.get("bandcolor")];
             var loc = sighting.get("sightinglocation");
             var className = sighting.getBandsClassName();
-	    var birdsightings = bird.get("sightings");
+	        var birdsightings = bird.get("sightings");
 
             by_band.push({
                 tokens: tokens,
@@ -75,8 +84,15 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
             by_place: by_place
         }
     }
+
+    /**
+     * Uses Typeahead.js Bloodhound to implement query suggestions 
+     * and to format search results
+     * Initiated by typing characters into searchbar
+     */
     messenger.when("loaded:sightings", function(birds) {
         var tokens = parse(birds);
+        // Prepares autocomplete by band
         var band_engine = new Bloodhound({
             local: tokens.by_band,
             datumTokenizer: function(d) {
@@ -86,7 +102,7 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
             limit: 10
         });
         band_engine.initialize()
-
+        // Prepares autocomplete by location
         var place_engine = new Bloodhound({
             local: tokens.by_place,
             datumTokenizer: function(d) {
@@ -125,25 +141,33 @@ define(["messenger", "sightings"], function(messenger, bird_data) {
                 },
                 templates: {
                     empty: "<div class='tt-empty-results'>No results found.</div>",
-                    suggestion: _.compile($("#suggestion-location-template").html()),
+                    suggestion: _.compile($("#suggestion-location-template")
+                                            .html()),
                     header: "<h2>By Location</h2>"
-            },
-        }).on("typeahead:selected", function(e, suggestion) {
+                }
+            }
+            
+        /**
+         * When search query is selected, triggers event adding query to the map
+         */
+        ).on("typeahead:selected", function(e, suggestion){
             switch(suggestion.type) {
                 case "bandnumber":
                 case "bandstring":
                     var bird = bird_data.getBirds()._byId[suggestion.bandnumber]
                     if (bird) {
                         selected[suggestion.bandnumber] = true;
-                        messenger.dispatch("add:sightings", bird.get("sightings"), bird);
+                        messenger.dispatch("add:sightings", 
+                                           bird.get("sightings"), bird);
                     }
                 break;
                 case "location":
                     selected[suggestion.val] = true;
-                    messenger.dispatch("show:location", suggestion.val, suggestion.sightings);
+                    messenger.dispatch("show:location", suggestion.val,
+                                        suggestion.sightings);
                 break;
             }
-            $searchbar.typeahead("val", "")
+            $searchbar.typeahead("val", "");
         });
 
         messenger.when("add:filter", function(id) {
