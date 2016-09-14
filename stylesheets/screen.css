@@ -172,7 +172,9 @@ input {
   padding: 5px 0;
   background: #f2f2f0;
 }
-
+.tt-hint {
+    color: #999;
+}
 /* line 107, ../sass/screen.scss */
 .tt-empty-results {
   line-height: 3;

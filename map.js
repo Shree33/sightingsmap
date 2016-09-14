@@ -64,12 +64,12 @@ define(["messenger"], function(messenger) {
             return model.get("date");
         }
         this.active_sighting_models.on("remove", function(model, collection) {
-            /*if (collection.length > 2)
+            if (collection.length > 2)
                 messenger.dispatch("render:timeline");
             else { 
                 messenger.dispatch("reset:timeline")
-            }*/
-            // that.fitToBounds();
+            }
+            that.fitToBounds();
         })
 
         messenger.when("show:markers add:sightings", function() {
