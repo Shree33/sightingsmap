@@ -128,7 +128,6 @@ define(["messenger"], function(messenger){
     //        Active_bird_list from map.js
     updateHandles: function() {
       var $timeline, handles, max, maxdate, min, mindate, prevcomparator;
-      console.log(this.collection);
       if (this.collection.length < 2) {
         this.$el.fadeOut("fast");
         return this;

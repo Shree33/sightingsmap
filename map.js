@@ -64,12 +64,12 @@ define(["messenger"], function(messenger) {
             return model.get("date");
         }
         this.active_sighting_models.on("remove", function(model, collection) {
-            if (collection.length > 2)
+            /*if (collection.length > 2)
                 messenger.dispatch("render:timeline");
             else { 
                 messenger.dispatch("reset:timeline")
-            }
-            that.fitToBounds();
+            }*/
+            // that.fitToBounds();
         })
 
         messenger.when("show:markers add:sightings", function() {
@@ -123,7 +123,7 @@ define(["messenger"], function(messenger) {
      */
     Map.prototype.showMarkers = function(sightings, parent) {
         var that = this;
-    var allMarkers = [];
+        var allMarkers = [];
         that.active_sighting_models.add(sightings.models);
         sightings.each(function(sighting) {
             sighting.allsightings = that.active_sighting_models;
@@ -133,12 +133,12 @@ define(["messenger"], function(messenger) {
                 sighting.marker = marker.marker;
                 sighting.latLng = marker.latLng;
                 sighting.marker.setIcon(parent.marker_url);
-        allMarkers.push(sighting.marker);
+                allMarkers.push(sighting.marker);
                 var infowindow = new google.maps.InfoWindow(
                   { 
                     // Change data shown in infowindow here
                     content: "<p> Bird ID: " + sighting.get("bird_id")+ "</p>" +
-                             "<p> Color: " + sighting.getBandString() + "</p>" + 
+                             // "<p> Color: " + sighting.getBandString() + "</p>" + 
                              "<p> Date: " + 
                              sighting.get("date").format("M/D/YY") + "</p>",
                   });

@@ -2,6 +2,7 @@
  * Sightings.js
  * Creates 2 collections of sightings based on bird and on location
  */
+
 define(["messenger"], function(messenger){
     function parseNums(obj) {
         _.each(obj, function(val, key) {
@@ -45,8 +46,8 @@ define(["messenger"], function(messenger){
                 sightings: new Sightings
             }
         },
-        // When this is called the sighting in the arg is put into 
-        // the sightings collection for the current bird
+
+        // Puts sighting into bird's personal sighting collection
         addSighting: function(sighting) {
             this.get("sightings").add(sighting);
             return this;
@@ -271,6 +272,7 @@ define(["messenger"], function(messenger){
                     that.remove();
                 }, 200)
                 e.stopPropagation();
+                location.reload();
             },
             "click .info-tooltip": function(e) {
                 e.stopPropagation();
